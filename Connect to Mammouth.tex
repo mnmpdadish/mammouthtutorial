@@ -1,0 +1,310 @@
+\documentclass[10pt,letter]{article}
+
+%------------------------------------------------------------------------------------------------------------------------%
+
+%\usepackage[french]{babel} 			% parce qu'on travaille en fraçais
+\usepackage[utf8]{inputenc}	% maudit MAC!
+\usepackage[cyr]{aeguill}				% règle un problème de guillemets
+\usepackage{amssymb}				% pour les lettres grecques
+\usepackage{amsmath}				% plein de bonus pour les maths
+\usepackage{amsfonts}				% plein de fonts pour les maths
+\usepackage{fullpage} 				% parce qu'on a pas de note en marge
+\usepackage{geometry}				% permet de changer les marges
+\usepackage[pdftex]{graphicx}		% permet de dimensioner des graphismes
+\usepackage{tocbibind}				% inclut la TOC et la BIBLI dans la table des matière
+\usepackage[small,bf]{caption}		% change le format des captions
+\usepackage{wrapfig}					% permet de mettre des petite figures en petit
+\usepackage{multicol}					% plusieurs colonnes
+\usepackage{fancyhdr}				% pour faire des beaux headers
+\usepackage{hyperref}				% pour avoir des hyper références dans le texte.
+\usepackage{fancyvrb}
+
+\usepackage{titlesec}
+
+%------------------------------------------------------------------------------------------------------------------------%
+%------------------------------------------------------CODE---------------------------------------------------------%
+
+\usepackage{color}
+\usepackage{listings}
+\lstset{
+language=bash,					% choose the language of the code
+basicstyle=\footnotesize,			% the size of the fonts that are used for the code
+numbers=left,                   			% where to put the line-numbers
+numberstyle=\footnotesize,      	% the size of the fonts that are used for the line-numbers
+stepnumber=1,                   		% If it is 1 each line will be numbered
+numbersep=5pt,                  		% how far the line-numbers are from the code
+backgroundcolor=\color{blue},  	% choose the background color.
+showspaces=false,               		% show spaces adding particular underscores
+showstringspaces=false,         	% underline spaces within strings
+showtabs=false,                 		% show tabs within strings adding particular underscores
+frame=single,           				% adds a frame around the code
+tabsize=2,          					% sets default tabsize to 2 spaces
+captionpos=b,           				% sets the caption-position to bottom
+breaklines=true,        				% sets automatic line breaking
+breakatwhitespace=false,    		% automatic breaks should only happen at whitespace
+escapeinside={\%*}{*)}          		% if you want to add a comment within your code
+}
+
+%------------------------------------------------------------------------------------------------------------------------%
+%------------------------------------------------------------------------------------------------------------------------%
+
+\setlength{\oddsidemargin}{25mm}
+\setlength{\evensidemargin}{25mm}
+\setlength{\voffset}{-1in}
+\setlength{\hoffset}{-1in}
+\setlength{\textwidth}{166mm}
+\setlength{\topmargin}{4mm}
+\setlength{\headheight}{10mm}
+\setlength{\headsep}{12mm}
+\setlength{\topskip}{0mm}
+\setlength{\textheight}{228mm}
+
+\pagestyle{fancy}
+\makeatletter
+\newenvironment{tablehere}
+  {\def\@captype{table}}
+  {}
+\newenvironment{figurehere}
+  {\def\@captype{figure}}
+  {}
+\makeatother
+
+\titleformat{\section}{\normalsize\bfseries}{\thesection}{0.7 em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.1 em}{}
+%\addto\captionsfrench{\def\figurename{Figure}}
+%\addto\captionsfrench{\def\tablename{Tableau}}
+
+
+%Substitution des symbols
+
+\newcommand{\lp}{\left(}
+\newcommand{\rp}{\right)}
+
+\newcommand{\bra}[1]{\langle #1|}
+\newcommand{\ket}[1]{|#1\rangle}
+\newcommand{\braket}[2]{\langle #1|#2\rangle}
+
+\newcommand{\bphi}{\langle \phi |}
+\newcommand{\kphi}{| \psi \rangle}
+\newcommand{\bpsi}{\langle \psi |}
+\newcommand{\kpsi}{| \psi \rangle}
+
+\newcommand{\bphit}{\langle \phi (t) |}
+\newcommand{\kphit}{| \psi (t) \rangle}
+\newcommand{\bpsit}{\langle \psi (t) |}
+\newcommand{\kpsit}{| \psi (t) \rangle}
+
+\newcommand{\trace}[1]{\text{Tr}\left[ #1 \right]}
+
+\newcommand{\cre}{a^\dagger_i}
+\newcommand{\ann}{a_i}
+
+%------------------------------------------------------------------------------------------------------------------------%
+%------------------------------------------------------------------------------------------------------------------------%
+%------------------------------------------------------------------------------------------------------------------------%
+%------------------------------------------------------------------------------------------------------------------------%
+%------------------------------------------------------------------------------------------------------------------------%
+%------------------------------------------------------------------------------------------------------------------------%
+%------------------------------------------------------------------------------------------------------------------------%
+
+\fancyhead[LO,LE]{Simon Verret}
+\fancyhead[RO,RE]{Using Mammouth}
+
+\begin{document}
+
+%------------------------------------------------------------------------------------------------------------------------%
+
+\begin{centering}
+
+\Large{\textbf{Using Mammouth}}\\
+\normalsize{Simon Verret}\\
+\small{Sherbrooke\\ May 2014}
+
+\end{centering}
+
+%------------------------------------------------------------------------------------------------------------------------%
+
+
+\begin{abstract}
+This is intended to help someone who wants to connect to the supercomputer mammouth. It shows how put jobs in the execution queue and how to follow the progression for those jobs.
+\end{abstract}
+
+\tableofcontents
+
+\renewcommand{\baselinestretch}{1.00}
+\setlength{\parskip}{0.8\baselineskip}
+\setlength{\parindent}{0mm}
+
+%------------------------------------------------------------------------------------------------------------------------%
+
+\vspace{2mm}
+
+\section{UNIX}
+Before reading this, one should be familliar with Unix. Strictly speaking, Unix is an OS like every other: it allows you to acces direcories, modify files and execute programs. However, Unix can be intimidating because it is used from a terminal with command lines. If you need help to get familliar with Unix, I suggest the first 4 lectures of this website: \url{http://www.doc.ic.ac.uk/~wjk/UnixIntro/index.html}.
+
+\subsection{Connect to Mammouth}
+Once you're familliar with unix, you can connect to mammouth, the supercalculator at Sherbrooke University. Of course, you'll need to get a username and a password with the help of André-Marie. Once you have one, try the following command (with appropriate username):
+\begin{quote}
+\begin{verbatim}
+ssh -X username@tremblay-ms.ccs.usherbrooke.ca
+\end{verbatim}
+\end{quote}
+Then enter your password, and that's it, you're connected! Notice that you're connected to the MS, standing for \emph{Mammouth Serie}. There is also MP (\emph{Mammouth Parallel}), a different cluster with more computing cores, to which you can connect by replacing \verb tremblay-ms  by \verb tremblay-mp  in the command.
+
+\subsection{Moving files}
+Here are some commands that can be useful to move files between your computer and mammouth. You must run them being disconnected. To move from mammouth to your computer:
+\begin{quote}
+\begin{verbatim}
+scp -r verretsi@tremblay-ms.ccs.usherbrooke.ca:~/path/file ./file
+\end{verbatim}
+\end{quote}
+and from your computer to mammouth
+\begin{quote}
+\begin{verbatim}
+scp -r ./file verretsi@tremblay-ms.ccs.usherbrooke.ca:~/path/file
+\end{verbatim}
+\end{quote}
+the ``-r" (recursively) is to move folders. Your password will be asked, except if you make it automatic (next).
+
+
+
+\subsection{Automatic password}
+This part is facultative. It will allows to connect without entering your password. To do that, you need \emph{SSH-Agent} installed. You can check if it's installed by running:
+\begin{quote}
+\begin{verbatim}
+echo "$SSH_AUTH_SOCK"
+\end{verbatim}
+\end{quote}
+If something appears, it's installed. Otherwise, go get it. 
+
+Then, we will use shh-agent to make the password automatic. Follow these steps, in which \verb local$  and \verb remote$  indicates respectively when the command is done on your computer (host) or on mammouth (remote). First,
+\begin{quote}
+\begin{verbatim}
+local$ ssh-keygen -t dsa
+\end{verbatim}
+\end{quote}				
+that will generate a key. It will ask you a location, but leave it blank, it finds its place by default. Then chose a passphrase, your less confusing option probably being your mammouth password. After that, you can transfer this key to mammouth :
+\begin{quote}
+\begin{verbatim}
+local$ scp ~/.ssh/id_dsa.pub verretsi@tremblay-ms.ccs.usherbrooke.ca:~/
+\end{verbatim}
+\end{quote}
+Then connect to mammouth:
+\begin{quote}
+\begin{verbatim}
+local$ ssh username@tremblay-ms.ccs.usherbrooke.ca
+\end{verbatim}
+\end{quote}		
+entering the password again. Once on mammouth, you can copy the key in the appropriate directory:
+\begin{quote}
+\begin{verbatim}
+remote$ cat ~/id_dsa.pub >> ~/.ssh/authorized_keys
+\end{verbatim}
+\end{quote}	
+and then make sure the permission are -rw-r--r-- :
+\begin{quote}
+\begin{verbatim}
+remote$ chmod 644 ~/.ssh/authorized_keys
+\end{verbatim}
+\end{quote}
+then return on the host:
+\begin{quote}
+\begin{verbatim}
+remote$ exit
+\end{verbatim}
+\end{quote}	
+and try reconnecting
+\begin{quote}
+\begin{verbatim}
+local$ ssh verretsi@tremblay-ms.ccs.usherbrooke.ca
+\end{verbatim}
+\end{quote}
+At this point, it is ssh-agent, not mammouth, that will ask for the password. If it works, it means ssh-agent can now manage the authentification. Exit and connect as you wish for a try! Finally, for some OS, you won't need more than this for the thing to work all the time. For others, you may need to run the following commands on startup of your computer:
+\begin{quote}
+\begin{verbatim}
+local$ ssh-agent
+local$ ssh-add ~/.ssh/id\_dsa
+\end{verbatim}
+\end{quote}
+
+
+
+
+\section{Launch jobs on Mammouth}
+\subsection{Job submissions}
+
+There are to way two submit jobs on mammouth, here I present the basic way with the command \verb qsub . There is also a fancier way, with the \verb bqsubmit  command, but I'll skip it for now. When submitting jobs, one first need to ask for the necessary amount of cores and memory. This is done with a system called \emph{Torque} (identified by acronym PBS) which manage the priority of your jobs, given a set of mysterious rules.
+
+Although you could learn everythin on internet, here are my personal basics. The idea is to write a file containing the commands to execute as a script, preceded by a PBS header. By default, the name of this file should be \verb sub.pbs . Here, I want to execute \verb echo  \verb "hello  \verb world"  using 2 cores on mammouth (somewhat overkill) and record the terminal output in a file name \verb ecran_out  (otherwise lost):
+
+Submission file \verb sub.pbs :
+\begin{quote}
+\begin{verbatim}
+#!/bin/bash
+
+#PBS -N thisnameisboring
+#PBS -q qwork@ms
+#PBS -l nodes=1:ppn=2,walltime=10:00:00
+
+cd $PBS_O_WORKDIR
+echo "hello world" >> ecran_out
+\end{verbatim}
+\end{quote}
+
+The first line is the usual bash script header. The second line, the first PBS line, determines the name of the job, because keeping good track of the jobs you submit is a really good habit to take. The second PBS line determine the queue in which you want to submit your job. Appart from \verb qwork@ms  (allows max 120h) , there is also \verb qtest@ms  (max $\sim$10h)  and \verb qlong@ms  (max 1000h). It is the third PBS line which is important, since it specifies the requirements of one job. For example, here we ask for 1 node, 2 cores (ppn), and an expected maximum time of 10:00 hours. The idea behind this is that our allowed total time per core is counted and determines our priorities in the queues. We don't want to use too much. 
+
+The last part is the executed script. The command \verb cd  \verb $PBS_O_WORKDIR  displace the ``current directory" of the script at the directory from where the submission was called (with the environnement variable \verb $PBS_O_WORKDIR ). This is necessary if you want the output files your script to end there. 
+
+Finally, one can submit this once and for all:
+\begin{quote}
+\begin{verbatim}
+qsub sub.pbs
+\end{verbatim}
+\end{quote}
+The job gets a number which will be displayed and then is waiting in the queue.
+
+
+There is 8 cores per node and 16 Go of memory. A single node is always reserved to a single user. A good habit is therefore to fill a node completely as often as possible, so that you don't waste the unused core time. So, one should send 8 jobs with node=1 and ppn=1 at a time, or 4 with ppn=2, or any other combination that gives 8. For memory greedy programs, it can be avised to ask for more cores even if the program use only one of them. That way you won't have memory conflicts. For example, with \verb qcm  I like to send only two 12-sites computations by node.
+
+
+\subsection{ Follow your jobs}
+
+Once the job is submitted, one can check its status with the \verb qstat  command. A plain \verb qstat  will yield a list of all the users. To get your specific jobs, use (-u for users):
+\begin{quote}
+\begin{verbatim}
+qstat -nu username@ms
+\end{verbatim}
+\end{quote}
+
+The status of the job will be marked as Q if it is waiting and as R if running. Once the job is running you can see on which node it is (given that you added the -n option, for ``node"). You can even visit this particular node with the command \verb ssh  followed by the number of the node, and then, for example, you can check the core usage with command \verb top .
+
+Finally, if something is wrong, use \verb qdel  with the number of the job, to kill it. It should look like:
+\begin{quote}
+\begin{verbatim}
+qdel 645587.ms.m
+\end{verbatim}
+\end{quote}
+
+
+\section{Compile on mammouth}
+
+To compile some programs, various libraries such as GSL or CUBA may be needed. The \emph{module} command allows you to  add or remove different versions of various common libraries on your sessions in order to use them when compiling. Here are the most important commands
+\begin{quote}
+\begin{verbatim}
+module list
+module avail
+module add mymodule
+module init-add mymodule
+module rm mymodule
+module init-rm mymodule
+\end{verbatim}
+\end{quote}
+
+
+
+
+\end{document}
+
+
+
+
