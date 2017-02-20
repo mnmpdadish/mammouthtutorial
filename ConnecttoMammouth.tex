@@ -268,7 +268,7 @@ The job gets a number which will be displayed and then is waiting in the queue.
 There is 8 cores per node and 16 Go of memory. A single node is always reserved to a single user. A good habit is therefore to fill a node completely as often as possible, so that you don't waste the unused core time. So, one should send 8 jobs with node=1 and ppn=1 at a time, or 4 with ppn=2, or any other combination that gives 8. For memory greedy programs, it can be avised to ask for more cores even if the program use only one of them. That way you won't have memory conflicts. For example, with \verb qcm  I like to send only two 12-sites computations by node.
 
 
-\subsection{ Follow your jobs}
+\subsection{Follow your jobs}
 
 Once the job is submitted, one can check its status with the \verb qstat  command. A plain \verb qstat  will yield a list of all the users. To get your specific jobs, use (-u for users):
 \begin{quote}
@@ -286,6 +286,14 @@ qdel 645587.ms.m
 \end{verbatim}
 \end{quote}
 
+\subsection{Monitor the available nodes}
+One very useful command to see how many nodes are busy on the cluster is 
+\begin{quote}
+\begin{verbatim}
+bqmon
+\end{verbatim}
+\end{quote}
+Which will show you each available queue and the number of request made on that queue.
 
 \section{Compile on mammouth}
 

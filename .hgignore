@@ -1,7 +1,7 @@
 syntax: glob
-Connect to Mammouth.aux
-Connect to Mammouth.log
-Connect to Mammouth.out
-Connect to Mammouth.pdf
-Connect to Mammouth.synctex.gz
-Connect to Mammouth.toc
+ConnectToMammouth.aux
+ConnectToMammouth.log
+ConnectToMammouth.out
+ConnectToMammouth.pdf
+ConnectToMammouth.synctex.gz
+ConnectToMammouth.toc
