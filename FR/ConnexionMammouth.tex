@@ -1,0 +1,450 @@
+\documentclass[10pt,letter]{article}
+
+%------------------------------------------------------------------------------------------------------------------------%
+
+\usepackage[french]{babel} 			% parce qu'on travaille en fraçais
+\usepackage[applemac]{inputenc}	% maudit MAC!
+\usepackage[cyr]{aeguill}				% règle un problème de guillemets
+\usepackage{amssymb}				% pour les lettres grecques
+\usepackage{amsmath}				% plein de bonus pour les maths
+\usepackage{amsfonts}				% plein de fonts pour les maths
+\usepackage{fullpage} 				% parce qu'on a pas de note en marge
+\usepackage{geometry}				% permet de changer les marges
+\usepackage[pdftex]{graphicx}		% permet de dimensioner des graphismes
+\usepackage{tocbibind}				% inclut la TOC et la BIBLI dans la table des matière
+\usepackage[small,bf]{caption}		% change le format des captions
+\usepackage{wrapfig}					% permet de mettre des petite figures en petit
+\usepackage{multicol}					% plusieurs colonnes
+\usepackage{fancyhdr}				% pour faire des beaux headers
+\usepackage{hyperref}				% pour avoir des hyper références dans le texte.
+\usepackage{fancyvrb}
+
+\usepackage{titlesec}
+
+%------------------------------------------------------------------------------------------------------------------------%
+%------------------------------------------------------CODE---------------------------------------------------------%
+
+\usepackage{color}
+\usepackage{listings}
+\lstset{
+language=bash,					% choose the language of the code
+basicstyle=\footnotesize,			% the size of the fonts that are used for the code
+numbers=left,                   			% where to put the line-numbers
+numberstyle=\footnotesize,      	% the size of the fonts that are used for the line-numbers
+stepnumber=1,                   		% If it is 1 each line will be numbered
+numbersep=5pt,                  		% how far the line-numbers are from the code
+backgroundcolor=\color{blue},  	% choose the background color.
+showspaces=false,               		% show spaces adding particular underscores
+showstringspaces=false,         	% underline spaces within strings
+showtabs=false,                 		% show tabs within strings adding particular underscores
+frame=single,           				% adds a frame around the code
+tabsize=2,          					% sets default tabsize to 2 spaces
+captionpos=b,           				% sets the caption-position to bottom
+breaklines=true,        				% sets automatic line breaking
+breakatwhitespace=false,    		% automatic breaks should only happen at whitespace
+escapeinside={\%*}{*)}          		% if you want to add a comment within your code
+}
+
+%------------------------------------------------------------------------------------------------------------------------%
+%------------------------------------------------------------------------------------------------------------------------%
+
+\setlength{\oddsidemargin}{25mm}
+\setlength{\evensidemargin}{25mm}
+\setlength{\voffset}{-1in}
+\setlength{\hoffset}{-1in}
+\setlength{\textwidth}{166mm}
+\setlength{\topmargin}{4mm}
+\setlength{\headheight}{10mm}
+\setlength{\headsep}{12mm}
+\setlength{\topskip}{0mm}
+\setlength{\textheight}{228mm}
+
+\pagestyle{fancy}
+\makeatletter
+\newenvironment{tablehere}
+  {\def\@captype{table}}
+  {}
+\newenvironment{figurehere}
+  {\def\@captype{figure}}
+  {}
+\makeatother
+
+\titleformat{\section}{\normalsize\bfseries}{\thesection}{0.7 em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.1 em}{}
+\addto\captionsfrench{\def\figurename{Figure}}
+\addto\captionsfrench{\def\tablename{Tableau}}
+
+
+%Substitution des symbols
+
+\newcommand{\lp}{\left(}
+\newcommand{\rp}{\right)}
+
+\newcommand{\bra}[1]{\langle #1|}
+\newcommand{\ket}[1]{|#1\rangle}
+\newcommand{\braket}[2]{\langle #1|#2\rangle}
+
+\newcommand{\bphi}{\langle \phi |}
+\newcommand{\kphi}{| \psi \rangle}
+\newcommand{\bpsi}{\langle \psi |}
+\newcommand{\kpsi}{| \psi \rangle}
+
+\newcommand{\bphit}{\langle \phi (t) |}
+\newcommand{\kphit}{| \psi (t) \rangle}
+\newcommand{\bpsit}{\langle \psi (t) |}
+\newcommand{\kpsit}{| \psi (t) \rangle}
+
+\newcommand{\trace}[1]{\text{Tr}\left[ #1 \right]}
+
+\newcommand{\cre}{a^\dagger_i}
+\newcommand{\ann}{a_i}
+
+%------------------------------------------------------------------------------------------------------------------------%
+%------------------------------------------------------------------------------------------------------------------------%
+%------------------------------------------------------------------------------------------------------------------------%
+%------------------------------------------------------------------------------------------------------------------------%
+%------------------------------------------------------------------------------------------------------------------------%
+%------------------------------------------------------------------------------------------------------------------------%
+%------------------------------------------------------------------------------------------------------------------------%
+
+\fancyhead[LO,LE]{Résumés de Simon Verret}
+\fancyhead[RO,RE]{Unix, Mammouth et QCT}
+
+\begin{document}
+
+%------------------------------------------------------------------------------------------------------------------------%
+
+\begin{centering}
+
+\Large{\textbf{Unix, mammouth et qct : guide du débutant}}\\
+\normalsize{Simon Verret}\\
+\small{Résumés de Simon Verret, Sherbrooke\\janvier 2011}
+
+\end{centering}
+
+%------------------------------------------------------------------------------------------------------------------------%
+
+\renewcommand{\baselinestretch}{1.00}
+\setlength{\parskip}{0.9\baselineskip}
+\setlength{\parindent}{0mm}
+
+\begin{abstract}
+Voici un document qui résume ce qu'il y a à savoir sur UNIX et Mammouth pour parvenir à produire un graphique. J'utilise plus précisément QCT pour obtenir un graphique des paramètres d'ordre antiferromagnétique et supraconducteur en mode VCA ou en mode CDMFT. Je voulais faire une recette facile à décoder pour qu'un prochain utilisateur puisse se familiariser rapidement avec l'interface une façon élémentaire de l'utiliser. J'ai mis quelques images pour ceux qui ne savent pas lire, et beaucoup d'exemples. Toute l'information dans ce document vient de mon expérience personnelle et je n'ai mis que quelques liens qui permettent de se retrouver si j'ai fait des erreurs. Ce n'est pas un document officiel et je n'ai pas tout vérifié, mais ça marche bien. Le mieux, après tout, c'est toujours d'explorer un peu par soi-même.
+\end{abstract}
+
+%------------------------------------------------------------------------------------------------------------------------%
+
+\vspace{2mm}
+
+\section{UNIX et sont utilisation avec mammouth}
+De façon utilitaire, Unix est simplement un système d'exploitation. C'est à dire, avec Unix, on peut accéder à des dossiers, modifier des fichiers et lancer des programmes. Ce qui le rend intimidant, c'est qu'on le contrôle à partir d'un terminal et il est donc nécessaire d'en connaître les commandes de base pour l'utiliser. Internet est un bon ami pour apprendre à se familiariser avec Unix. Si vous n'êtes pas familier, vous devez le devenir. Voici un site qui présente l'essentiel avec des exercices qui sont faisables en une journée. Je conseille de faire au moins les 4 premières \emph{lectures} avant tout. Allez! maintenant! \url{http://www.doc.ic.ac.uk/~wjk/UnixIntro/index.html}
+
+L'éditeur de texte usuel dans un terminal Unix est VI. Il est cependant difficile à utiliser et demande pas mal de temps d'adaptation. Je vous suggère d'essayer l'éditeur nano avec la commande suivante. Il est beaucoup plus intuitif à utiliser.
+\begin{quote}
+\begin{verbatim}
+nano fichier.txt
+\end{verbatim}
+\end{quote}
+
+\begin{center}
+\vspace{-5mm}
+\includegraphics[width=160mm]{nano}
+\vspace{-10mm}
+\end{center}
+
+Finalement, voici quelques sous-sections où je vous présente des commandes moins habituelles que nous utiliserons à cause de mammouth.
+\subsection{Connexion à Mammouth par ssh}
+On a des calculs très exigeants à faire, et il faut donc savoir faire fonctionner Mammouth, le super calculateur de l'université de Sherbrooke. Vous devez préalablement avoir un compte utilisateur sur mammouth. Un technicien ou un professeur devra vous assister pour la création d'un tel compte. Lorsque c'est réglé, on peut se connecter à partir d'un terminal Unix en utilisant la commande ssh avec le usernam@remote. Dans mon cas, c'était :
+\begin{quote}
+\begin{verbatim}
+ssh -X verretsi@tremblay-ms.ccs.usherbrooke.ca
+\end{verbatim}
+\end{quote}
+ssh demande alors le mot de passe et le terminal devient ensuite une borne de contrôle de mammouth. Essayez-le tout de suite, car vous avez vraiment hâte d'être loggué sur un ordi aussi puissant! Pour éviter d'avoir à entrer le mot de passe à chaque connexion, on peut utiliser ssh-agent. C'est la section suivante.
+
+\subsection{automatisation d'un mot de passe ssh avec ssh-agent}
+Cette section est facultative, mais vous aurez bientôt envie de tout automatiser, alors pourquoi pas maintenant. Il faut d'abord s'assurer que ssh-Agent est installé sur l'ordinateur hôte. Si ce n'est pas le cas, cherchez sur internet, moi je n'ai pas eu besoin, alors je ne sais pas comment faire.
+
+Ensuite, il faut faire quelques manipulations dans Unix pour automatiser le mot de passe. Ces manipulations nécessitent d'être effectuées une seule fois. Voici les commandes à entrer dans l'ordre ainsi que leur raison d'être. Les prémisses ``local\$" et ``remote\$" me permettent simplement d'indiquer si la commande s'effectue sur votre ordinateur ou sur mammouth (remote). D'abord,
+\begin{quote}
+\begin{verbatim}
+local$ ssh-keygen -t dsa
+\end{verbatim}
+\end{quote}				
+génère une clé. Il vous demandera d'autres infos... laissez le nom tel quel et choisissez un passphrase. Ça simplifie les choses si c'est le même mot de passe que pour mammouth. Ensuite,
+\begin{quote}
+\begin{verbatim}
+local$ scp ~/.ssh/id_dsa.pub verretsi@tremblay-ms.ccs.usherbrooke.ca:~/
+\end{verbatim}
+\end{quote}
+copie la clé dans mammouth. (la commande scp est assez utile en général et j'en parle plus loin). Une fois la clé copiée, on se connecte à mammouth.
+\begin{quote}
+\begin{verbatim}
+local$ ssh username@tremblay-ms.ccs.usherbrooke.ca
+\end{verbatim}
+\end{quote}		
+On entre le mot de passe du compte normalement, car il faut aller faire des manipulations dans mammouth pour arriver à se logguer sans mot de passe. On copie ensuite la clé au bon endroit:
+\begin{quote}
+\begin{verbatim}
+remote$ cat ~/id_dsa.pub >> ~/.ssh/authorized_keys
+\end{verbatim}
+\end{quote}	
+Après quoi il est nécessaire de lui donner les bonnes permissions d'accès:
+\begin{quote}
+\begin{verbatim}
+remote$ chmod 644 ~/.ssh/authorized_keys -   
+\end{verbatim}
+\end{quote}
+attention, car selon mes sources, 644 sont les permissions spécifiques pour le fonctionnemt, si vous ne comprenez pas les permissions chiffrées, ce sont: -rw-r--r--.
+\begin{quote}
+\begin{verbatim}
+remote$ exit
+\end{verbatim}
+\end{quote}	
+là on quitte, et on se reconnecte:
+\begin{quote}
+\begin{verbatim}
+local$ ssh verretsi@tremblay-ms.ccs.usherbrooke.ca -  
+\end{verbatim}
+\end{quote}
+et ça se connecte à mammouth en demandant le passphrase, après quoi on peut se reconnecter autant de fois qu'on le désire sans mot de passe. En fait, une fois ces étapes effectuées, SSH-Agent aura la capacité de gérer toutes les connexions à mammouth. Tout ce qu'il faudra faire, c'est activer la clé de communication au démarrage de votre ordinateur en entrant le passphrase. Il y a deux façons. On peut le faire avec ces commandes :
+\begin{quote}
+\begin{verbatim}
+local$ ssh-agent
+local$ ssh-add ~/.ssh/id\_dsa
+\end{verbatim}
+\end{quote}
+Ou encore, si vous essayez de vous connecter, SSH agent détectera parfois automatiquement la demande de mot de passe et il affichera une fenêtre qui demandera d'entrer le passphrase. Une fois le passphrase entré, vous n'aurez plus besoin d'entrer de mot de passe pour effectuer les transferts, les connexions, ou autres.
+
+\subsection{Utilisation de scripts pour accélérer la procédure}
+Il est possible d'écrire 2 scripts qui vous éviteront d'avoir à toujours réécrire les commandes ssh et les commandes de connexion à mammouth. Pour écrire un script, on ne fait qu'écrire un fichier texte (avec nano par exemple) contenant les commandes à effectuer et on le rend exécutable en changeant ses permissions. Voici mes scripts : 
+
+Script 1 : autoagent : Il active ssh-agent.
+\begin{quote}
+\begin{verbatim}
+#!/bin/bash
+ssh-agent
+ssh-add ~/.ssh/id\_dsa
+\end{verbatim}
+\end{quote}
+Script 2 : connectssh : il se connecte à mammouth
+\begin{quote}
+\begin{verbatim}
+#!/bin/bash
+ssh -X verretsi@tremblay-ms.ccs.usherbrooke.ca
+\end{verbatim}
+\end{quote}
+
+Une fois ces fichiers textes écrits, il suffit de changer leurs permissions pour qu'ils deviennent exécutables et de les placer dans le dossier ``bin". Pour le faire, vous n'avez qu'à utiliser les commandes suivantes.
+\begin{quote}
+\begin{verbatim}
+chmod 755 autoagent
+chmod 755 connectssh
+mv autoagent ~/bin
+mv connectssh ~/bin
+\end{verbatim}
+\end{quote}
+
+\begin{center}
+\vspace{-5mm}
+\includegraphics[width=180mm]{mamouth}
+\vspace{-10mm}
+\end{center}
+
+\subsection{Déplacements des fichiers de et vers mammouth}
+Voici certaines commandes de copie sécurisée qui montre qu'il est possible de déplacer des fichiers à travers un protocole ssh. Pour copier un fichier de mammouth au dossier en cours sur mon mac:
+\begin{quote}
+\begin{verbatim}
+scp verretsi@tremblay-ms.ccs.usherbrooke.ca:~/path/file ./file
+\end{verbatim}
+\end{quote}
+pour copier un fichier de mon mac à mammouth, il suffit de faire l'inverse:
+\begin{quote}
+\begin{verbatim}
+scp ./file verretsi@tremblay-ms.ccs.usherbrooke.ca:~/path/file
+\end{verbatim}
+\end{quote}
+Pour un dossier il suffit d'ajouter l'option ``-r". Le mot de passe sera toujours demandé, à moins d'avoir initialisé ssh-agent.
+
+\pagebreak
+
+\section{MAMMOUTH}
+\subsection{Soumettre des calculs}
+Pour soumettre des calculs à mammouth, il faut d'abord réserver des processeurs et de la mémoire pour un temps donné. C'est le système informatique \emph{Torque} (identifié par l'acronyme PBS) qui s'occupe ensuite de donner la bonne priorité à cette réservation et la fait entrer dans une file d'attente. Beaucoup d'information sur ce système est disponible ici : \url{http://www.clusterresources.com/torquedocs/index.shtml}
+
+Bien que vous pourriez tout apprendre sur le site officiel, voici mes trucs. Pour effectuer une soumission, il faut préalablement avoir préparé un fichier texte de soumission. Voici un exemple fonctionnel expliqué en détail. Le nom du fichier est normalement ``qsub.pbs''.
+\begin{quote}
+\begin{verbatim}
+#!/bin/bash
+#PBS -N celuiquilitcenomestbon
+#PBS -q qwork@ms
+#PBS -l nodes=1:ppn=2,walltime=10:00:00
+cd $PBS_O_WORKDIR
+echo "hello world" >> ecran_out
+\end{verbatim}
+\end{quote}
+Le fichier est un script qui sera exécuté. L'information pour la soumission est contenue dans l'en-tête (commentaires suivit de PBS). Dans cet exemple, il y a d'abord le nom de la soumission à la première ligne : celuiquilitcenomestbon. La deuxième ligne donne la ``file d'attente" (queue) dans laquelle la tâche sera placée. On voit dans ce cas qu'elle sera dans la file nommée \emph{qwork} de Mammouth Série (ms) bien qu'on aurait pu choisir la qtest ou encore la qlong qui allouent un temps maximal plus ou moins grand. Finalement, la troisième ligne dénote toutes les demandes de la soumission. On demande d'abord un noeud de calcul (nodes=1) et ensuite 2 coeurs sur ce noeud (ppn=2) pendant 10h (walltime=10:00:00). Plus d'information au sujet des files d'attentes, des coeurs, et de l'allocation de mémoire est disponible sur le site du RQCHP : \url{https://rqchp.ca/?pageId=618}. 
+
+Le temps de calcul limité fait en sorte que le calcul sera stoppé s'il est trop long, mais s'il se termine par lui même avant, le noeud sera automatiquement libéré. Puisqu'André-Marie a plus de 800 coeurs-années alloués par calcul Québec en 2012, vous pouvez vous permettre d'exagérer, vaut mieux un calcul trop long qu'un calcul stoppé. 
+
+Dans la suite du script, la commande \emph{cd} \emph{\$PBS\_O\_WORKDIR}, déplace l'exécution dans le dossier d'origine de la soumission. Enfin, la commande à exécuter (le programme à lancer) est effectuée. Sur cette même ligne, on redirige l'output (ce qui s'afficherait normalement à l'écran) vers un fichier (\emph{ecran\_out}) pour pouvoir voir ce qui s'est passé une fois le calcul complété.
+
+Pour faire cette soumission, il suffit de placer ce fichier texte dans le dossier où l'on souhaite faire l'exécution (qui deviendra  \emph{\$PBS\_O\_WORKDIR} pour le système) et y effectuer la commande :
+\begin{quote}
+\begin{verbatim}
+qsub sub.pbs
+\end{verbatim}
+\end{quote}
+
+Le calcul se voit attribuer un numéro qui s'affiche à l'écran et il se retrouve dans la file d'attente. 
+
+
+
+\subsection{suivre la progression des calculs}
+
+Une fois le calcul soumis, on peut voir son état dans la file d'attente. La commande \emph{qstat} nous permet de voir la file d'attente et possède plusieurs options utiles qui nous permettront de ne cibler que nos calculs. On pourrait par exemple consulter les calculs de l'utilisateur \emph{verretsi} (option -u) uniquement avec les noeuds utilisés (option -n) sur le calculateur \emph{ms}  avec la commande suivante :
+\begin{quote}
+\begin{verbatim}
+qstat -nu verretsi @ms
+\end{verbatim}
+\end{quote}
+
+\begin{center}
+\vspace{-5mm}
+\includegraphics[width=160mm]{soumission}
+\vspace{-8mm}
+\end{center}
+
+Une fois qu'on voit le statut des calculs, on sait s'ils sont en queue (identifiés par Q) ou s'ils sont actifs (R). Lorsque le calcul est lancé, le noeud entier où il est lancé est réservé pour l'utilisateur.  Cela signifie que si la tâche ne requiert que 2 coeurs sur un noeud de 8 coeurs, 6 coeurs seront gaspillés. Il serait donc préférable de lancer 4 soumissions de ce genre plutôt qu'une, car le noeud vous sera réservé de toute façon.
+
+Une fois actifs (R), l'option -n (commande \emph{qstat -n})nous permet de voir le numéro du noeud ainsi que les coeurs sur lesquels le processus est actif. On peut même ``visiter" un noeud sur lequel un de nos calculs est actif. Pour le faire, on utilise la commande ssh avec le numéro du noeud. Par exemple, on pourrait accéder au noeud cs044.
+\begin{quote}
+\begin{verbatim}
+ssh cs044
+\end{verbatim}
+\end{quote}
+Une fois sur le noeud, on pourra utiliser la commande ``top" pour afficher l'utilisation des processeurs de ce noeud.
+
+Finalement, pour supprimer une soumission, on utilise la commande qdel suivi du numéro de la soumission.
+\begin{quote}
+\begin{verbatim}
+qdel 645587.ms.m
+\end{verbatim}
+\end{quote}
+
+
+
+\subsection{Soumettre plusieurs calculs d'un coup : BqTools}
+
+BqTools est un système de soumission de calculs qui permet de lancer de grandes quantités de calculs similaires. Par exemple, on utiliserait BqTools pour calculer une fonction très lourde $f(x,y,z)$ pour une grande quantité de $x,y,z$ différents. Dans ce sens, BqTools ne fait pas une loop, il lance plusieurs calculs, à partir de plusieurs paramètres différents et plusieurs dossiers différents, permettant de récupérer les données dans des dossiers indépendants. Il permet aussi de faire la microgestion des calculs pour ne pas congestionner mammouth. Enfin, il peut aussi lancer le traitement des données automatiquement après ou même avant les calculs. Pour ce document, je couvrirai la préparation des paramètres, la soumission et la microgestion des calculs. La documentation officielle de BqTools est très utile et couvre beaucoup d'autres options : \url{https://rqchp.ca/modules/cms/checkFileAccess.php?file=local.rqchpweb_udes/bqtools/doc/bqUserGuide_4.2.pdf}
+
+Comme pour la soumission d'une tâche seule, le système BQtools requiert un fichier de soumission. Voici l'exemple qui sera détaillé. Le nom du fichier est habituellement \emph{bqsubmit.dat}.
+
+\begin{quote}
+\begin{verbatim}
+####MICROGESTION####
+batchName = celuiquilitcenomestbon2
+concurrentJobs = 4
+microJobs = 6
+submitOptions=-q qwork@ms -l nodes=1:ppn=8,walltime=2:00:00
+
+######EXECUTION######
+command = ./job > ecran_out
+linkFiles = ~/bin/job ~/dossier/fichierutile.txt
+
+#####PARAMÈTRES#####
+templateFiles = para.dat
+param1 = num = 1.0 : 1 : 42.0
+\end{verbatim}
+\end{quote}
+
+\subsubsection{BqTools : soumission}
+C'est ici que j'explique l'EXECUTION du fichier exemple.
+\begin{quote}
+\begin{verbatim}
+######EXECUTION######
+command = ./job > ecran_out
+linkFiles = ~/bin/job ~/dossier/fichierutile.txt
+\end{verbatim}
+\end{quote}
+Pour lancer la soumission, on lance la commande 
+\begin{quote}
+\begin{verbatim}
+bqsubmit
+\end{verbatim}
+\end{quote}
+à partit du dossier où est situé le fichier bqsubmit.dat. BqTools génère alors automatiquement des dossiers pour chaque jobs dans ce répertoire en y copiant tous les fichiers énoncés à la ligne \emph{linkFiles}. Dans cet exemple, BqTools copie \emph{fichierutile.txt} et l'exécutable \emph{job} dans le dossier. Il copie aussi le fichier \emph{para.dat} avec les paramètres modifiés comme expliqué dans ce qui suit et lance les tâches.
+
+\subsubsection{BqTools : préparation des paramètres}
+
+C'est ici que j'explique les PARAMÈTRES du fichier exemple.
+\begin{quote}
+\begin{verbatim}
+#####PARAMÈTRES#####
+templateFiles = para.dat
+param1 = num = 1.0 : 1 : 42.0
+\end{verbatim}
+\end{quote}
+BqTools est capable de ``générer" une batch de tâches à partir d'une liste de paramètres en input. Par exemple, si on veut calculer $f(x)$ pour $x=1,2,3,4,5,6,7,8,9,10$ il est facile de construire une loop, mais pour $x=1,2,5,7,17,34,21,30,...$ la loop est plus complexe. Avec BqTools, toutes sortes de moyens nous sont offerts pour construire une telle liste de paramètres pour le programme. Dans l'exemple, le programme nommé \emph{job} est construit de sorte tel qu'il nécessite un fichier texte nommé \emph{para.dat} dans lequel il lira les paramètres d'entrée. Pour profiter des options de BqSubmit, on ne joint pas directement  ce fichier à chaque dossier. En effet, le \emph{para.dat} est utilisé comme un exemple (\emph{templateFiles}) pour générer des \emph{para.dat} avec des paramètres différents pour chaque dossier. Pour identifier les paramètre à faire varier, on doit les marquer dans le \emph{templateFiles}. Dans l'exemple, à la ligne qui suit le \emph{templateFiles}, on demande que le paramètre nommé ``num", contenu dans le \emph{para.dat} prenne les valeurs 1 à 42. Toutefois, pour que BqSubmit trouve le paramètre ``num" correctement, on doit l'identifier dans le \emph{para.dat} en exemple avec des ``$\sim$" de chaque coté. Voici un exemple :
+\emph{para.dat} :
+\begin{quote}
+\begin{verbatim}
+#para.dat
+task		sef
+U 		= 	8.0
+mu 	= 	4.0
+t 		= 	1.0
+tp 		= 	0.2
+num 	=	~~num~~
+\end{verbatim}
+\end{quote}
+Avec ce fichier exemple, BqSubmit génèrera 42 fichier, tous nommés \emph{para.dat} avec les 42 valeurs de ``num" et les mettra dans 42 dossier d'où seront lancer 42 exécution du programme.
+
+\subsubsection{BqTools : microgestion}
+C'est ici que j'explique la MICROGESTION du fichier exemple. La façon la plus simple de comprendre la microgestion de BQ tools est d'inspecter la figure suivante.
+\begin{center}
+\vspace{-5mm}
+\includegraphics[width=165mm]{BQtools.pdf}
+\vspace{-8mm}
+\end{center}
+Comme on le voit dans cet exemple, il y a 42 tâches à effectuer au total et BqTools fait de la ``microgestion" pour l'allocation des ressources. On a ici demandé de séparer les 42 jobs en 7 paquets de 6. Les paquets 6, nommés ``microjobs" sont alors gérés comme des tâches seule au sens où les 6 tâches seront exécutées une à la suite de l'autre pour une seule allocation de ressources. Dans le cas d'une véritable soumission à 42 tâches, il ne serait pas vraiment nécessaire d'appeler BqTools simplement pour faire de la ``microgestion" comme celle là. Ça ne devient utile que si on a plusieurs centaine de tâches courtes à effectuer et qu'on ne veut pas congestionner le système de priorités de Mammouth. 
+
+Pour bien comprendre la signification des lignes, voici les détails:
+\begin{quote}
+\begin{verbatim}
+batchName = celuiquilitcenomestbon2
+\end{verbatim}
+\end{quote}
+donne un nom à la batch,
+\begin{quote}
+\begin{verbatim}
+concurrentJobs = 4
+\end{verbatim}
+\end{quote}
+détermine le nombre maximal de tâches effectué simultanément et 
+\begin{quote}
+\begin{verbatim}
+microJobs = 6
+\end{verbatim}
+\end{quote}
+détermine le nombre de tâches par microjobs (paquets). Idéalement on s'arrange pour que le produit de \emph{microJobs} et de \emph{concurrentJobs} donne le nombre total de tâches, pour pouvoir tout calculer d'un coup. Dans l'exemple, on force des calculs à attendre parce que $6\times4\ne42$
+\begin{quote}
+\begin{verbatim}
+submitOptions=-q qwork@ms -l nodes=1:ppn=8,walltime=2:00:00
+\end{verbatim}
+\end{quote}
+Finalement, comme pour la soumission seule, on demande le nombre de noeud de calcul (1) le nombre de coeurs par noeud (8) et le temps d'exécution maximal (2h) pour chaque PAQUET (\emph{microJobs}) de la soumission.
+
+
+\section{QCT et Gnuplot}
+
+QCT est un programme qui a été écrit par David Sénéchal et le meilleur moyen d'obtenir de l'information clair et précise au sujet du programme est d'aller lui en parler en personne. Cependant, il est parfois occupé, et il est utile d'avoir d'autres références. Son code vient avec de la documentation \emph{Doxyfile} (sous forme de site web) qui vous sera surement très utile. Ce que je propose est complémentaire et moins général. Nous allons suivre un exemple dans lequel nous obtiendrons un graphique des ``paramètres d'ordre" pour les phases supraconductrice et anti-ferromagnétique en fonction du dopage électronique pour un supra-conducteur à haut TC. Tout ça est théorique, bien sûr, mais vous ne liriez pas ça si vous étiez dans le groupe de Louis Taillefer.
+
+
+qct... ah maudite affaire ça va être long. Allez donc voir David Sénéchal. 
+
+\end{document}
+
+
+
+
