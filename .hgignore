@@ -1,12 +1,8 @@
 syntax: glob
-ConnecttoMammouth.aux
-ConnecttoMammouth.log
-ConnecttoMammouth.out
-ConnecttoMammouth.pdf
-ConnecttoMammouth.synctex.gz
-ConnecttoMammouth.toc
-FR/ConnexionMammouth.aux
-FR/ConnexionMammouth.log
-FR/ConnexionMammouth.out
-FR/ConnexionMammouth.pdf
-FR/ConnexionMammouth.synctex.gz
+*.aux
+*.log
+*.out
+*.pdf
+*.synctex.gz
+*.toc
+*.swp

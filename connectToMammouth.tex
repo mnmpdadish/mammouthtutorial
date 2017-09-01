@@ -4,7 +4,7 @@
 
 %\usepackage[french]{babel} 			% parce qu'on travaille en fraçais
 \usepackage[utf8]{inputenc}	% maudit MAC!
-\usepackage[cyr]{aeguill}				% règle un problème de guillemets
+%\usepackage[cyr]{aeguill}				% règle un problème de guillemets
 \usepackage{amssymb}				% pour les lettres grecques
 \usepackage{amsmath}				% plein de bonus pour les maths
 \usepackage{amsfonts}				% plein de fonts pour les maths
@@ -16,10 +16,14 @@
 \usepackage{wrapfig}					% permet de mettre des petite figures en petit
 \usepackage{multicol}					% plusieurs colonnes
 \usepackage{fancyhdr}				% pour faire des beaux headers
-\usepackage{hyperref}				% pour avoir des hyper références dans le texte.
+\usepackage[pdftex,plainpages=false,colorlinks=true,linkcolor=blue, citecolor=blue, urlcolor=blue]{hyperref}
 \usepackage{fancyvrb}
 
 \usepackage{titlesec}
+
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{fontspec}
 
 %------------------------------------------------------------------------------------------------------------------------%
 %------------------------------------------------------CODE---------------------------------------------------------%
@@ -44,6 +48,10 @@ breaklines=true,        				% sets automatic line breaking
 breakatwhitespace=false,    		% automatic breaks should only happen at whitespace
 escapeinside={\%*}{*)}          		% if you want to add a comment within your code
 }
+
+
+\newfontfamily\UbuntuMonospace{Ubuntu Monospace}
+
 
 %------------------------------------------------------------------------------------------------------------------------%
 %------------------------------------------------------------------------------------------------------------------------%
@@ -107,7 +115,7 @@ escapeinside={\%*}{*)}          		% if you want to add a comment within your cod
 %------------------------------------------------------------------------------------------------------------------------%
 %------------------------------------------------------------------------------------------------------------------------%
 
-\fancyhead[LO,LE]{Simon Verret \& Alexandre Foley}
+\fancyhead[LO,LE]{Simon Verret \& Alexandre Foley \& Maxime Charlebois}
 \fancyhead[RO,RE]{Using Mammouth}
 
 \begin{document}
@@ -117,8 +125,8 @@ escapeinside={\%*}{*)}          		% if you want to add a comment within your cod
 \begin{centering}
 
 \Large{\textbf{Using Mammouth}}\\
-\normalsize{Simon Verret \& Alexandre Foley}\\
-\small{Sherbrooke\\ May 2014}
+\normalsize{Simon Verret \& Alexandre Foley \& Maxime Charlebois}\\
+\small{Sherbrooke\\ September 2017}
 
 \end{centering}
 
@@ -126,8 +134,7 @@ escapeinside={\%*}{*)}          		% if you want to add a comment within your cod
 
 
 \begin{abstract}
-This is intended to help someone who wants to connect to the supercomputer mammouth. It shows how put jobs in the execution queue and how to follow the progression for those jobs.
-This is my paper, don't forget it!
+This is intended to help someone who wants to connect to the supercomputer mammouth. It shows how to put jobs in the execution queue and how to follow the progression for those jobs.
 \end{abstract}
 
 \tableofcontents
@@ -141,7 +148,57 @@ This is my paper, don't forget it!
 \vspace{2mm}
 
 \section{UNIX}
-Before reading this, one should be familliar with Unix. Strictly speaking, Unix is an OS like every other: it allows you to acces direcories, modify files and execute programs. However, Unix can be intimidating because it is used from a terminal with command lines. If you need help to get familliar with Unix, I suggest the first 4 lectures of this website: \url{http://www.doc.ic.ac.uk/~wjk/UnixIntro/index.html}.
+Before reading this, one should be familliar with Unix (or Linux, or Bash). 
+Strictly speaking, Unix is an OS like every other: it allows you to acces direcories, modify files and execute programs. 
+However, Unix can be intimidating because it is used from a terminal with command lines.
+The reader is expected to know the basic commands before reading this document. Here is a list of the most important command that you should know before reading this document:
+\begin{quote}
+\begin{verbatim}ls\end{verbatim} salut
+\begin{verbatim}cd\end{verbatim}
+\begin{verbatim}pwd\end{verbatim}
+\begin{verbatim}mkdir\end{verbatim}
+\end{quote}
+
+
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+
+\lstdefinestyle{BashInputStyle}{
+  language=bash,
+  basicstyle=\small\ttfamily,
+  frame=tb,
+  columns=fullflexible,
+  backgroundcolor=\color{mygray},
+  linewidth=0.9\linewidth,
+  xleftmargin=0.1\linewidth,
+  commentstyle=\color{mygreen}
+}
+
+\lstdefinestyle{BashOutputStyle}{
+  basicstyle=\small\ttfamily,
+  numbers=none,
+  frame=tblr,
+  columns=fullflexible,
+  backgroundcolor=\color{blue!10},
+  linewidth=0.9\linewidth,
+  xleftmargin=0.1\linewidth
+}
+
+
+
+
+\begin{lstlisting}[style=BashInputStyle]
+ls
+cd   #ceci est un commentaire
+pwd
+mkdir
+cp
+mv
+\end{lstlisting} 
+
+
+If you need help to get familliar with Unix, I suggest the first 4 lectures of this website: \url{http://www.doc.ic.ac.uk/~wjk/UnixIntro/index.html}.
 
 \subsection{Connect to Mammouth}
 Once you're familliar with unix, you can connect to mammouth, the supercalculator at Sherbrooke University. Of course, you'll need to get a username and a password with the help of André-Marie. Once you have one, try the following command (with appropriate username):
