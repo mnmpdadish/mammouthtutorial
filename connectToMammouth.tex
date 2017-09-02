@@ -24,6 +24,21 @@
 \usepackage{listings}
 \usepackage{xcolor}
 \usepackage{color}
+\usepackage[framemethod=tikz]{mdframed}
+
+\definecolor{myletters}{rgb}{1.0,0.972,827}
+\definecolor{mymauve}{rgb}{0.262,0.098,0.188}
+\definecolor{mycomment}{rgb}{0.215,0.37,0.64}
+\definecolor{myblue}{rgb}{0.9,0.9,0.98}
+
+\lstset{columns=fullflexible,basicstyle=\ttfamily}
+\surroundwithmdframed[
+  hidealllines=true,
+  backgroundcolor=mymauve,
+  innerleftmargin=-20pt,
+  innerrightmargin=-20pt,
+  innertopmargin=10pt,
+  innerbottommargin=0pt]{lstlisting}
 
 %----------------------------------------------------------------------%
 
@@ -102,15 +117,11 @@ The reader is expected to know the basic commands before reading this document. 
 \end{quote}
 
 
-\definecolor{myletters}{rgb}{1.0,0.972,827}
-\definecolor{mymauve}{rgb}{0.262,0.098,0.188}
-\definecolor{mycomment}{rgb}{0.215,0.37,0.64}
-\definecolor{myblue}{rgb}{0.9,0.9,0.98}
 
 \lstdefinestyle{BashInputStyle}{
   language=bash,
   basicstyle=\small\ttfamily\color{myletters},
-  frame=tblr, 
+  frame=none, 
   backgroundcolor=\color{mymauve},
   linewidth=0.9\linewidth,
   xleftmargin=0.1\linewidth,
@@ -123,12 +134,12 @@ The reader is expected to know the basic commands before reading this document. 
 
 
 \begin{lstlisting}[style=BashInputStyle]
-  ls                         # list the file in the current directory
-  cd                         # change directory
-  pwd                        # show the current directory
-  mkdir                      # make a new directory
-  cp                         # copy files or directories
-  mv                         # move files or directories
+$ ls                         # list the file in the current directory
+$ cd                         # change directory
+$ pwd                        # show the current directory
+$ mkdir                      # make a new directory
+$ cp                         # copy files or directories
+$ mv                         # move files or directories
 \end{lstlisting} 
 
 
