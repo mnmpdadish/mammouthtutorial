@@ -6,3 +6,4 @@ syntax: glob
 *.synctex.gz
 *.toc
 *.swp
+*tmp*
