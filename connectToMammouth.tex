@@ -23,38 +23,9 @@
 
 \usepackage{listings}
 \usepackage{xcolor}
-\usepackage{fontspec}
-
-%------------------------------------------------------------------------------------------------------------------------%
-%------------------------------------------------------CODE---------------------------------------------------------%
-
 \usepackage{color}
-\usepackage{listings}
-\lstset{
-language=bash,					% choose the language of the code
-basicstyle=\footnotesize,			% the size of the fonts that are used for the code
-numbers=left,                   			% where to put the line-numbers
-numberstyle=\footnotesize,      	% the size of the fonts that are used for the line-numbers
-stepnumber=1,                   		% If it is 1 each line will be numbered
-numbersep=5pt,                  		% how far the line-numbers are from the code
-backgroundcolor=\color{blue},  	% choose the background color.
-showspaces=false,               		% show spaces adding particular underscores
-showstringspaces=false,         	% underline spaces within strings
-showtabs=false,                 		% show tabs within strings adding particular underscores
-frame=single,           				% adds a frame around the code
-tabsize=2,          					% sets default tabsize to 2 spaces
-captionpos=b,           				% sets the caption-position to bottom
-breaklines=true,        				% sets automatic line breaking
-breakatwhitespace=false,    		% automatic breaks should only happen at whitespace
-escapeinside={\%*}{*)}          		% if you want to add a comment within your code
-}
 
-
-\newfontfamily\UbuntuMonospace{Ubuntu Monospace}
-
-
-%------------------------------------------------------------------------------------------------------------------------%
-%------------------------------------------------------------------------------------------------------------------------%
+%----------------------------------------------------------------------%
 
 \setlength{\oddsidemargin}{25mm}
 \setlength{\evensidemargin}{25mm}
@@ -85,35 +56,6 @@ escapeinside={\%*}{*)}          		% if you want to add a comment within your cod
 
 %Substitution des symbols
 
-\newcommand{\lp}{\left(}
-\newcommand{\rp}{\right)}
-
-\newcommand{\bra}[1]{\langle #1|}
-\newcommand{\ket}[1]{|#1\rangle}
-\newcommand{\braket}[2]{\langle #1|#2\rangle}
-
-\newcommand{\bphi}{\langle \phi |}
-\newcommand{\kphi}{| \psi \rangle}
-\newcommand{\bpsi}{\langle \psi |}
-\newcommand{\kpsi}{| \psi \rangle}
-
-\newcommand{\bphit}{\langle \phi (t) |}
-\newcommand{\kphit}{| \psi (t) \rangle}
-\newcommand{\bpsit}{\langle \psi (t) |}
-\newcommand{\kpsit}{| \psi (t) \rangle}
-
-\newcommand{\trace}[1]{\text{Tr}\left[ #1 \right]}
-
-\newcommand{\cre}{a^\dagger_i}
-\newcommand{\ann}{a_i}
-
-%------------------------------------------------------------------------------------------------------------------------%
-%------------------------------------------------------------------------------------------------------------------------%
-%------------------------------------------------------------------------------------------------------------------------%
-%------------------------------------------------------------------------------------------------------------------------%
-%------------------------------------------------------------------------------------------------------------------------%
-%------------------------------------------------------------------------------------------------------------------------%
-%------------------------------------------------------------------------------------------------------------------------%
 
 \fancyhead[LO,LE]{Simon Verret \& Alexandre Foley \& Maxime Charlebois}
 \fancyhead[RO,RE]{Using Mammouth}
@@ -160,41 +102,33 @@ The reader is expected to know the basic commands before reading this document. 
 \end{quote}
 
 
-\definecolor{mygreen}{rgb}{0,0.6,0}
-\definecolor{mygray}{rgb}{0.5,0.5,0.5}
-\definecolor{mymauve}{rgb}{0.58,0,0.82}
+\definecolor{myletters}{rgb}{1.0,0.972,827}
+\definecolor{mymauve}{rgb}{0.262,0.098,0.188}
+\definecolor{mycomment}{rgb}{0.215,0.37,0.64}
+\definecolor{myblue}{rgb}{0.9,0.9,0.98}
 
 \lstdefinestyle{BashInputStyle}{
   language=bash,
-  basicstyle=\small\ttfamily,
-  frame=tb,
-  columns=fullflexible,
-  backgroundcolor=\color{mygray},
+  basicstyle=\small\ttfamily\color{myletters},
+  frame=tblr, 
+  backgroundcolor=\color{mymauve},
   linewidth=0.9\linewidth,
   xleftmargin=0.1\linewidth,
-  commentstyle=\color{mygreen}
+  commentstyle=\color{mycomment},
+  columns=flexible
 }
 
-\lstdefinestyle{BashOutputStyle}{
-  basicstyle=\small\ttfamily,
-  numbers=none,
-  frame=tblr,
-  columns=fullflexible,
-  backgroundcolor=\color{blue!10},
-  linewidth=0.9\linewidth,
-  xleftmargin=0.1\linewidth
-}
 
 
 
 
 \begin{lstlisting}[style=BashInputStyle]
-ls
-cd   #ceci est un commentaire
-pwd
-mkdir
-cp
-mv
+  ls                         # list the file in the current directory
+  cd                         # change directory
+  pwd                        # show the current directory
+  mkdir                      # make a new directory
+  cp                         # copy files or directories
+  mv                         # move files or directories
 \end{lstlisting} 
 
 
