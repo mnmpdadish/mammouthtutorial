@@ -26,19 +26,41 @@
 \usepackage{color}
 \usepackage[framemethod=tikz]{mdframed}
 
+
 \definecolor{myletters}{rgb}{1.0,0.972,827}
 \definecolor{mymauve}{rgb}{0.262,0.098,0.188}
-\definecolor{mycomment}{rgb}{0.215,0.37,0.64}
+\definecolor{mycomment}{rgb}{0.315,0.47,0.74}
 \definecolor{myblue}{rgb}{0.9,0.9,0.98}
+
+\newcommand{\dollar}{\mbox{\textdollar}}
 
 \lstset{columns=fullflexible,basicstyle=\ttfamily}
 \surroundwithmdframed[
   hidealllines=true,
   backgroundcolor=mymauve,
+  leftmargin=10pt,
+  rightmargin=40pt,  
   innerleftmargin=-20pt,
   innerrightmargin=-20pt,
   innertopmargin=10pt,
-  innerbottommargin=0pt]{lstlisting}
+  innerbottommargin=0pt,
+  roundcorner=5pt,
+  nobreak=true
+]{lstlisting}
+
+\lstdefinestyle{BashInputStyle}{
+  language=bash,
+  basicstyle=\small\ttfamily\color{myletters},
+  frame=none, 
+  backgroundcolor=\color{mymauve},
+  linewidth=0.9\linewidth,
+  xleftmargin=0.1\linewidth,
+  commentstyle=\color{mycomment},
+  columns=flexible,
+  showstringspaces=false,
+  moredelim=**[is][\color{red}]{~@}{@~},
+  mathescape = true
+}
 
 %----------------------------------------------------------------------%
 
@@ -65,6 +87,9 @@
 
 \titleformat{\section}{\normalsize\bfseries}{\thesection}{0.7 em}{}
 \titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.1 em}{}
+
+
+
 %\addto\captionsfrench{\def\figurename{Figure}}
 %\addto\captionsfrench{\def\tablename{Tableau}}
 
@@ -104,213 +129,157 @@ This is intended to help someone who wants to connect to the supercomputer mammo
 
 \vspace{2mm}
 
-\section{UNIX}
-Before reading this, one should be familliar with Unix (or Linux, or Bash). 
-Strictly speaking, Unix is an OS like every other: it allows you to acces direcories, modify files and execute programs. 
-However, Unix can be intimidating because it is used from a terminal with command lines.
-The reader is expected to know the basic commands before reading this document. Here is a list of the most important command that you should know before reading this document:
-\begin{quote}
-\begin{verbatim}ls\end{verbatim} salut
-\begin{verbatim}cd\end{verbatim}
-\begin{verbatim}pwd\end{verbatim}
-\begin{verbatim}mkdir\end{verbatim}
-\end{quote}
-
-
-
-\lstdefinestyle{BashInputStyle}{
-  language=bash,
-  basicstyle=\small\ttfamily\color{myletters},
-  frame=none, 
-  backgroundcolor=\color{mymauve},
-  linewidth=0.9\linewidth,
-  xleftmargin=0.1\linewidth,
-  commentstyle=\color{mycomment},
-  columns=flexible
-}
-
-
-
-
+\section{Linux}
+Before reading this, one should be familliar with Linux terminal 
+(Bash language, same as Mac terminal or Unix terminal). 
+Strictly speaking, Linux is an OS like every other: 
+it allows you to acces direcories, modify files and execute programs. 
+However, Linux can be intimidating because it usually requires the terminal to operate.
+The reader is expected to know the basic commands before reading this document. 
+Here is a list of the most important command that you should know before reading this document:
 
 \begin{lstlisting}[style=BashInputStyle]
-$ ls                         # list the file in the current directory
-$ cd                         # change directory
-$ pwd                        # show the current directory
-$ mkdir                      # make a new directory
-$ cp                         # copy files or directories
-$ mv                         # move files or directories
-\end{lstlisting} 
+$\dollar$ ls                         # list the file in the current directory
+$\dollar$ cd                         # change directory
+$\dollar$ pwd                        # show the current directory
+$\dollar$ mkdir                      # make a new directory
+$\dollar$ cp                         # copy files or directories
+$\dollar$ mv                         # move files or directories
+$\dollar$ rm                         # remove (delete) files or directories
+$\dollar$ sudo                       # do a command in superuser
+$\dollar$ cat                        # show the content of a file
+$\dollar$ man                        # show the manual of a command
+$\dollar$ grep                       # find a text or pattern in one or multiple file
+\end{lstlisting}
 
-
-If you need help to get familliar with Unix, I suggest the first 4 lectures of this website: \url{http://www.doc.ic.ac.uk/~wjk/UnixIntro/index.html}.
+In this document, we use "\verb $ " sign to indicate the terminal prompt 
+and the "\verb # " indicates a comment in the bash terminal.
+%The name "local" is the name of the terminal that run on your (local) computer.
+%A different name will be used when we will be logged on a remorte computer like mammouth.
+If you need help to get familliar with Linux (Unix), I suggest the first 4 lectures of this website: 
+\url{http://www.doc.ic.ac.uk/~wjk/UnixIntro/index.html}.
 
 \subsection{Connect to Mammouth}
-Once you're familliar with unix, you can connect to mammouth, the supercalculator at Sherbrooke University. Of course, you'll need to get a username and a password with the help of André-Marie. Once you have one, try the following command (with appropriate username):
-\begin{quote}
-\begin{verbatim}
-ssh -X username@tremblay-ms.ccs.usherbrooke.ca
-\end{verbatim}
-\end{quote}
+Once you're familliar with Linux, you can connect to mammouth, the supercalculator at Sherbrooke University. 
+Of course, you'll need to get a username and a password with the help of your supervisor.
+Let's suppose here that your supervisor is Andre-Marie Tremblay and that your username is charleb1.
+Now go in a terminal and type:
+\begin{lstlisting}[style=BashInputStyle]
+~@local@~$\dollar$ ssh -X charleb1@tremblay-ms.ccs.usherbrooke.ca
+\end{lstlisting}   
+
+
 Then enter your password, and that's it, you're connected! Notice that you're connected to the MS, standing for \emph{Mammouth Serie}. There is also MP (\emph{Mammouth Parallel}), a different cluster with more computing cores, to which you can connect by replacing \verb tremblay-ms  by \verb tremblay-mp  in the command.
 
 \subsection{Moving files}
-Here are some commands that can be useful to move files between your computer and mammouth. You must run them being disconnected. To move from mammouth to your computer:
-\begin{quote}
-\begin{verbatim}
-scp -r verretsi@tremblay-ms.ccs.usherbrooke.ca:~/path/file ./file
-\end{verbatim}
-\end{quote}
+Here are some commands that can be useful to move files between your computer and mammouth. 
+You must run them on a  terminal and not on a terminal logged onto mammouth.
+Indeed, you need to specify an internet address or a ip.
+Since you most likely don't know the ip address of your computer, 
+it is always better to use these command on a local terminal.
+To move from mammouth to your computer:
+\begin{lstlisting}[style=BashInputStyle]
+~@local@~$\dollar$ scp -r charleb1@tremblay-ms.ccs.usherbrooke.ca:~/path/file ./file
+\end{lstlisting}
 and from your computer to mammouth
-\begin{quote}
-\begin{verbatim}
-scp -r ./file verretsi@tremblay-ms.ccs.usherbrooke.ca:~/path/file
-\end{verbatim}
-\end{quote}
-the ``-r" (recursively) is to move folders. Your password will be asked, except if you make it automatic (next).
-
-
-
-\subsection{Automatic password}
-This part is facultative. It will allows to connect without entering your password. To do that, you need \emph{SSH-Agent} installed. You can check if it's installed by running:
-\begin{quote}
-\begin{verbatim}
-echo "$SSH_AUTH_SOCK"
-\end{verbatim}
-\end{quote}
-If something appears, it's installed. Otherwise, go get it. 
-
-Then, we will use shh-agent to make the password automatic. Follow these steps, in which \verb local$  and \verb remote$  indicates respectively when the command is done on your computer (host) or on mammouth (remote). First,
-\begin{quote}
-\begin{verbatim}
-local$ ssh-keygen -t dsa
-\end{verbatim}
-\end{quote}				
-that will generate a key. It will ask you a location, but leave it blank, it finds its place by default. Then chose a passphrase, your less confusing option probably being your mammouth password. After that, you can transfer this key to mammouth :
-\begin{quote}
-\begin{verbatim}
-local$ scp ~/.ssh/id_dsa.pub verretsi@tremblay-ms.ccs.usherbrooke.ca:~/
-\end{verbatim}
-\end{quote}
-Then connect to mammouth:
-\begin{quote}
-\begin{verbatim}
-local$ ssh username@tremblay-ms.ccs.usherbrooke.ca
-\end{verbatim}
-\end{quote}		
-entering the password again. Once on mammouth, you can copy the key in the appropriate directory:
-\begin{quote}
-\begin{verbatim}
-remote$ cat ~/id_dsa.pub >> ~/.ssh/authorized_keys
-\end{verbatim}
-\end{quote}	
-and then make sure the permission are -rw-r--r-- :
-\begin{quote}
-\begin{verbatim}
-remote$ chmod 644 ~/.ssh/authorized_keys
-\end{verbatim}
-\end{quote}
-then return on the host:
-\begin{quote}
-\begin{verbatim}
-remote$ exit
-\end{verbatim}
-\end{quote}	
-and try reconnecting
-\begin{quote}
-\begin{verbatim}
-local$ ssh verretsi@tremblay-ms.ccs.usherbrooke.ca
-\end{verbatim}
-\end{quote}
-At this point, it is ssh-agent, not mammouth, that will ask for the password. If it works, it means ssh-agent can now manage the authentification. Exit and connect as you wish for a try! Finally, for some OS, you won't need more than this for the thing to work all the time. For others, you may need to run the following commands on startup of your computer:
-\begin{quote}
-\begin{verbatim}
-local$ ssh-agent
-local$ ssh-add ~/.ssh/id\_dsa
-\end{verbatim}
-\end{quote}
-
-
+\begin{lstlisting}[style=BashInputStyle]
+~@local@~$\dollar$ scp -r ./file charleb1@tremblay-ms.ccs.usherbrooke.ca:~/path/file
+\end{lstlisting}
+the "-r" (recursively) is to move folders (like with the cp command). 
+Your password will be asked, except if you make it automatic (next).
 
 
 \section{Launch jobs on Mammouth}
 \subsection{Job submissions}
 
-There are to way two submit jobs on mammouth, here I present the basic way with the command \verb qsub . There is also a fancier way, with the \verb bqsubmit  command, but I'll skip it for now. When submitting jobs, one first need to ask for the necessary amount of cores and memory. This is done with a system called \emph{Torque} (identified by acronym PBS) which manage the priority of your jobs, given a set of mysterious rules.
-
-Although you could learn everythin on internet, here are my personal basics. The idea is to write a file containing the commands to execute as a script, preceded by a PBS header. By default, the name of this file should be \verb sub.pbs . Here, I want to execute \verb echo  \verb "hello  \verb world"  using 2 cores on mammouth (somewhat overkill) and record the terminal output in a file name \verb ecran_out  (otherwise lost):
+There are two way to submit jobs on mammouth, here I present the basic way with the command \verb qsub . 
+There is also a fancier way, with the \verb bqsubmit  command, but I'll skip it for now. 
+When submitting jobs, one first need to ask for the necessary amount of cores and memory. 
+This is done with a system called \emph{Torque} (identified by acronym PBS) which manage the priority of your jobs, 
+given a set of mysterious rules.
+Although you could learn everythin on internet, here are my personal basics. 
+The idea is to write a file containing the commands to execute as a script, preceded by a PBS header. 
+Let's name this file \verb sub.pbs . 
+Here, I want to execute \verb echo  \verb "hello  \verb world"  using 2 cores on mammouth (somewhat overkill) and record the terminal output in a file name \verb ecran_out  (otherwise lost):
 
 Submission file \verb sub.pbs :
-\begin{quote}
-\begin{verbatim}
+
+\begin{lstlisting}[style=BashInputStyle]
 #!/bin/bash
-
-#PBS -N thisnameisboring
+#PBS -N nameToTrackYourJob
 #PBS -q qwork@ms
-#PBS -l nodes=1:ppn=2,walltime=10:00:00
-
-cd $PBS_O_WORKDIR
+#PBS -l nodes=1:ppn=2,walltime=00:05:00
+cd $\dollar$PBS_O_WORKDIR
 echo "hello world" >> ecran_out
-\end{verbatim}
-\end{quote}
+\end{lstlisting}
 
-The first line is the usual bash script header. The second line, the first PBS line, determines the name of the job, because keeping good track of the jobs you submit is a really good habit to take. The second PBS line determine the queue in which you want to submit your job. Appart from \verb qwork@ms  (allows max 120h) , there is also \verb qtest@ms  (max $\sim$10h)  and \verb qlong@ms  (max 1000h). It is the third PBS line which is important, since it specifies the requirements of one job. For example, here we ask for 1 node, 2 cores (ppn), and an expected maximum time of 10:00 hours. The idea behind this is that our allowed total time per core is counted and determines our priorities in the queues. We don't want to use too much. 
+The first line is the usual bash script header. 
+The second line, the first PBS line, determines the name of the job, 
+because keeping good track of the jobs you submit is a really good habit to take. 
+The second PBS line determine the queue in which you want to submit your job. 
+Appart from \verb qwork@ms  (allows max 120h) , there is also \verb qtest@ms  (max $\sim$10h)  and \verb qlong@ms  (max 1000h). 
+It is the third PBS line which is important, since it specifies the requirements of one job. 
+For example, here we ask for 1 node, 2 cores (ppn for ``processor per node''), and an expected maximum time of 00:05 hours (5 minutes). 
+The idea behind this is that our allowed total time per core is counted and determines our priorities in the queues. 
+We don't want to use too much. 
 
-The last part is the executed script. The command \verb cd  \verb $PBS_O_WORKDIR  displace the ``current directory" of the script at the directory from where the submission was called (with the environnement variable \verb $PBS_O_WORKDIR ). This is necessary if you want the output files your script to end there. 
+The last part is the executed script. 
+The command \verb cd  \verb $PBS_O_WORKDIR  set the "current directory" at the directory from where the submission was called (with the environnement variable \verb $PBS_O_WORKDIR ) when running the script. 
+This is necessary if you want the output files your script to end there. 
 
 Finally, one can submit this once and for all:
-\begin{quote}
-\begin{verbatim}
-qsub sub.pbs
-\end{verbatim}
-\end{quote}
+\begin{lstlisting}[style=BashInputStyle]
+~@ms@~$\dollar$ qsub sub.pbs
+\end{lstlisting}
 The job gets a number which will be displayed and then is waiting in the queue.
 
 
-There is 8 cores per node and 16 Go of memory. A single node is always reserved to a single user. A good habit is therefore to fill a node completely as often as possible, so that you don't waste the unused core time. So, one should send 8 jobs with node=1 and ppn=1 at a time, or 4 with ppn=2, or any other combination that gives 8. For memory greedy programs, it can be avised to ask for more cores even if the program use only one of them. That way you won't have memory conflicts. For example, with \verb qcm  I like to send only two 12-sites computations by node.
+There is 8 cores per node and 16 Go of memory. 
+A single node is always reserved to a single user. 
+A good habit is therefore to fill a node completely as often as possible, 
+so that you don't waste the unused core time. 
+So, one should send 8 jobs with node=1 and ppn=1 at a time, or 4 with ppn=2, or any other combination that gives 8. 
+For memory greedy programs, it can be avised to ask for more cores even if the program use only one of them. 
+That way you won't have memory conflicts. For example, with \verb qcm  I like to send only two 12-sites computations by node.
 
 
 \subsection{Follow your jobs}
 
-Once the job is submitted, one can check its status with the \verb qstat  command. A plain \verb qstat  will yield a list of all the users. To get your specific jobs, use (-u for users):
-\begin{quote}
-\begin{verbatim}
-qstat -nu username@ms
-\end{verbatim}
-\end{quote}
+Once the job is submitted, one can check its status with the \verb qstat  command. 
+A plain \verb qstat  will yield a list of all the users. 
+To get your specific jobs, use (-u for users):
+\begin{lstlisting}[style=BashInputStyle]
+~@ms@~$\dollar$ qstat -nu charleb1@ms
+\end{lstlisting}
 
-The status of the job will be marked as Q if it is waiting and as R if running. Once the job is running you can see on which node it is (given that you added the -n option, for ``node"). You can even visit this particular node with the command \verb ssh  followed by the number of the node, and then, for example, you can check the core usage with command \verb top .
+The status of the job will be marked as Q if it is waiting in the queue and as R if running. 
+Once the job is running you can see on which node it is (given that you added the -n option, for ``node"). 
+You can even visit this particular node with the command \verb ssh  followed by the number of the node, and then, 
+for example, you can check the core usage with command \verb top .
 
 Finally, if something is wrong, use \verb qdel  with the number of the job, to kill it. It should look like:
-\begin{quote}
-\begin{verbatim}
-qdel 645587.ms.m
-\end{verbatim}
-\end{quote}
+\begin{lstlisting}[style=BashInputStyle]
+~@ms@~$\dollar$ qdel 645587.ms.m
+\end{lstlisting}
 
 \subsection{Monitor the available nodes}
 One very useful command to see how many nodes are busy on the cluster is 
-\begin{quote}
-\begin{verbatim}
-bqmon
-\end{verbatim}
-\end{quote}
+\begin{lstlisting}[style=BashInputStyle]
+~@ms@~$\dollar$ bqmon
+\end{lstlisting}
 Which will show you each available queue and the number of request made on that queue.
 
 \section{Compile on mammouth}
 
 To compile some programs, various libraries such as GSL or CUBA may be needed. The \emph{module} command allows you to  add or remove different versions of various common libraries on your sessions in order to use them when compiling. Here are the most important commands
-\begin{quote}
-\begin{verbatim}
-module list
-module avail
-module add mymodule
-module init-add mymodule
-module rm mymodule
-module init-rm mymodule
-\end{verbatim}
-\end{quote}
-
+\begin{lstlisting}[style=BashInputStyle]
+~@ms@~$\dollar$ module list
+~@ms@~$\dollar$ module avail
+~@ms@~$\dollar$ module add mymodule
+~@ms@~$\dollar$ module init-add mymodule
+~@ms@~$\dollar$ module rm mymodule
+~@ms@~$\dollar$ module init-rm mymodule
+\end{lstlisting}
 
 
 
