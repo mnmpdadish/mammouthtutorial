@@ -26,17 +26,14 @@
 \usepackage{color}
 \usepackage[framemethod=tikz]{mdframed}
 
-
 \definecolor{myletters}{rgb}{1.0,0.972,827}
 \definecolor{mymauve}{rgb}{0.262,0.098,0.188}
 \definecolor{mycomment}{rgb}{0.315,0.47,0.74}
-\definecolor{myblue}{rgb}{0.9,0.9,0.98}
+\definecolor{myblue}{rgb}{0.098,0.188,0.262}
 
 \newcommand{\dollar}{\mbox{\textdollar}}
 
-\lstset{columns=fullflexible,basicstyle=\ttfamily}
-\surroundwithmdframed[
-  hidealllines=true,
+\newmdenv[hidealllines=true,
   backgroundcolor=mymauve,
   leftmargin=10pt,
   rightmargin=40pt,  
@@ -45,8 +42,24 @@
   innertopmargin=10pt,
   innerbottommargin=0pt,
   roundcorner=5pt,
-  nobreak=true
-]{lstlisting}
+  nobreak=true]{bashInput}
+
+
+\lstset{columns=fullflexible,basicstyle=\ttfamily}
+
+\lstdefinestyle{FileInputStyle}{
+  language=bash,
+  basicstyle=\small\ttfamily\color{myletters},
+  frame=none, 
+  backgroundcolor=\color{myblue},
+  linewidth=0.9\linewidth,
+  xleftmargin=0.1\linewidth,
+  commentstyle=\color{mycomment},
+  columns=flexible,
+  showstringspaces=false,
+  moredelim=**[is][\color{red}]{~@}{@~},
+  mathescape = true
+}
 
 \lstdefinestyle{BashInputStyle}{
   language=bash,
@@ -59,6 +72,21 @@
   columns=flexible,
   showstringspaces=false,
   moredelim=**[is][\color{red}]{~@}{@~},
+  mathescape = true
+}
+
+\lstdefinestyle{BashOutputStyle}{
+  language=bash,
+  basicstyle=\scriptsize\ttfamily\color{myletters},
+  frame=none, 
+  backgroundcolor=\color{mymauve},
+  linewidth=0.9\linewidth,
+  xleftmargin=0.1\linewidth,
+  commentstyle=\color{myletters},
+  columns=flexible,
+  showstringspaces=false,
+  moredelim=**[is][\color{red}]{~@}{@~},
+  moredelim=**[is][\color{blue}]{@@}{@@},
   mathescape = true
 }
 
@@ -85,8 +113,8 @@
   {}
 \makeatother
 
-\titleformat{\section}{\normalsize\bfseries}{\thesection}{0.7 em}{}
-\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.1 em}{}
+%\titleformat{\section}{\normalsize\bfseries}{\thesection}{0.7 em}{}
+%\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.1 em}{}
 
 
 
@@ -129,7 +157,7 @@ This is intended to help someone who wants to connect to the supercomputer mammo
 
 \vspace{2mm}
 
-\section{Linux}
+\section{Linux command line}
 Before reading this, one should be familliar with Linux terminal 
 (Bash language, same as Mac terminal or Unix terminal). 
 Strictly speaking, Linux is an OS like every other: 
@@ -138,6 +166,7 @@ However, Linux can be intimidating because it usually requires the terminal to o
 The reader is expected to know the basic commands before reading this document. 
 Here is a list of the most important command that you should know before reading this document:
 
+\begin{bashInput}
 \begin{lstlisting}[style=BashInputStyle]
 $\dollar$ ls                         # list the file in the current directory
 $\dollar$ cd                         # change directory
@@ -151,6 +180,7 @@ $\dollar$ cat                        # show the content of a file
 $\dollar$ man                        # show the manual of a command
 $\dollar$ grep                       # find a text or pattern in one or multiple file
 \end{lstlisting}
+\end{bashInput}
 
 In this document, we use "\verb $ " sign to indicate the terminal prompt 
 and the "\verb # " indicates a comment in the bash terminal.
@@ -164,9 +194,11 @@ Once you're familliar with Linux, you can connect to mammouth, the supercalculat
 Of course, you'll need to get a username and a password with the help of your supervisor.
 Let's suppose here that your supervisor is Andre-Marie Tremblay and that your username is charleb1.
 Now go in a terminal and type:
+\begin{bashInput}
 \begin{lstlisting}[style=BashInputStyle]
 ~@local@~$\dollar$ ssh -X charleb1@tremblay-ms.ccs.usherbrooke.ca
 \end{lstlisting}   
+\end{bashInput}
 
 
 Then enter your password, and that's it, you're connected! Notice that you're connected to the MS, standing for \emph{Mammouth Serie}. There is also MP (\emph{Mammouth Parallel}), a different cluster with more computing cores, to which you can connect by replacing \verb tremblay-ms  by \verb tremblay-mp  in the command.
@@ -178,18 +210,27 @@ Indeed, you need to specify an internet address or a ip.
 Since you most likely don't know the ip address of your computer, 
 it is always better to use these command on a local terminal.
 To move from mammouth to your computer:
+\begin{bashInput}
 \begin{lstlisting}[style=BashInputStyle]
 ~@local@~$\dollar$ scp -r charleb1@tremblay-ms.ccs.usherbrooke.ca:~/path/file ./file
 \end{lstlisting}
+\end{bashInput}
 and from your computer to mammouth
+\begin{bashInput}
 \begin{lstlisting}[style=BashInputStyle]
 ~@local@~$\dollar$ scp -r ./file charleb1@tremblay-ms.ccs.usherbrooke.ca:~/path/file
 \end{lstlisting}
+\end{bashInput}
 the "-r" (recursively) is to move folders (like with the cp command). 
 Your password will be asked, except if you make it automatic (next).
 
 
 \section{Launch jobs on Mammouth}
+
+Most of the informations here were taken from:
+\url{http://wiki.calculquebec.ca/w/Running_jobs#tab=tab8}
+
+
 \subsection{Job submissions}
 
 There are two way to submit jobs on mammouth, here I present the basic way with the command \verb qsub . 
@@ -204,14 +245,16 @@ Here, I want to execute \verb echo  \verb "hello  \verb world"  using 2 cores on
 
 Submission file \verb sub.pbs :
 
-\begin{lstlisting}[style=BashInputStyle]
+\begin{bashInput}[backgroundcolor=myblue]
+\begin{lstlisting}[style=FileInputStyle]
 #!/bin/bash
 #PBS -N nameToTrackYourJob
 #PBS -q qwork@ms
 #PBS -l nodes=1:ppn=2,walltime=00:05:00
 cd $\dollar$PBS_O_WORKDIR
-echo "hello world" >> ecran_out
+echo "hello world" >> output.dat
 \end{lstlisting}
+\end{bashInput}
 
 The first line is the usual bash script header. 
 The second line, the first PBS line, determines the name of the job, 
@@ -228,9 +271,11 @@ The command \verb cd  \verb $PBS_O_WORKDIR  set the "current directory" at the d
 This is necessary if you want the output files your script to end there. 
 
 Finally, one can submit this once and for all:
+\begin{bashInput}
 \begin{lstlisting}[style=BashInputStyle]
-~@ms@~$\dollar$ qsub sub.pbs
+~@ms$\dollar$@~ qsub sub.pbs
 \end{lstlisting}
+\end{bashInput}
 The job gets a number which will be displayed and then is waiting in the queue.
 
 
@@ -248,9 +293,32 @@ That way you won't have memory conflicts. For example, with \verb qcm  I like to
 Once the job is submitted, one can check its status with the \verb qstat  command. 
 A plain \verb qstat  will yield a list of all the users. 
 To get your specific jobs, use (-u for users):
-\begin{lstlisting}[style=BashInputStyle]
-~@ms@~$\dollar$ qstat -nu charleb1@ms
+%\begin{bashInput}
+%\begin{lstlisting}[style=BashInputStyle]
+%~@ms$\dollar$@~ qstat -nu charleb1
+%\end{lstlisting}
+%\end{bashInput}
+
+
+\begin{bashInput}
+\obeyspaces
+\begin{lstlisting}[style=BashOutputStyle]
+~@ms$\dollar$@~ qstat -nu charleb1
+
+ms.m: 
+                                                                                  Req'd    Req'd       Elap
+Job ID                  Username    Queue    Jobname          SessID  NDS   TSK   Memory   Time    S   Time
+----------------------- ----------- -------- ---------------- ------ ----- ------ ------ --------- - ---------
+177107.ms.m             charleb1    qwork    nameToTrackYourJ   4059     1      2    --   00:05:00 R  00:00:02
+   cs302/0+cs302/1
 \end{lstlisting}
+\end{bashInput}
+
+
+%\begin{center}
+%\includegraphics[width=160mm,trim={0 0 1cm 2cm},clip]{hello.png}
+%\end{center}
+
 
 The status of the job will be marked as Q if it is waiting in the queue and as R if running. 
 Once the job is running you can see on which node it is (given that you added the -n option, for ``node"). 
@@ -258,28 +326,34 @@ You can even visit this particular node with the command \verb ssh  followed by 
 for example, you can check the core usage with command \verb top .
 
 Finally, if something is wrong, use \verb qdel  with the number of the job, to kill it. It should look like:
+\begin{bashInput}
 \begin{lstlisting}[style=BashInputStyle]
-~@ms@~$\dollar$ qdel 645587.ms.m
+~@ms$\dollar$@~ qdel 645587.ms.m
 \end{lstlisting}
+\end{bashInput}
 
 \subsection{Monitor the available nodes}
 One very useful command to see how many nodes are busy on the cluster is 
+\begin{bashInput}
 \begin{lstlisting}[style=BashInputStyle]
-~@ms@~$\dollar$ bqmon
+~@ms$\dollar$@~ bqmon
 \end{lstlisting}
+\end{bashInput}
 Which will show you each available queue and the number of request made on that queue.
 
 \section{Compile on mammouth}
 
 To compile some programs, various libraries such as GSL or CUBA may be needed. The \emph{module} command allows you to  add or remove different versions of various common libraries on your sessions in order to use them when compiling. Here are the most important commands
+\begin{bashInput}
 \begin{lstlisting}[style=BashInputStyle]
-~@ms@~$\dollar$ module list
-~@ms@~$\dollar$ module avail
-~@ms@~$\dollar$ module add mymodule
-~@ms@~$\dollar$ module init-add mymodule
-~@ms@~$\dollar$ module rm mymodule
-~@ms@~$\dollar$ module init-rm mymodule
+~@ms$\dollar$@~ module list
+~@ms$\dollar$@~ module avail
+~@ms$\dollar$@~ module add mymodule
+~@ms$\dollar$@~ module init-add mymodule
+~@ms$\dollar$@~ module rm mymodule
+~@ms$\dollar$@~ module init-rm mymodule
 \end{lstlisting}
+\end{bashInput}
 
 
 
