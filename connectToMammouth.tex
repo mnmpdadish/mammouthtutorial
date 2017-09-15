@@ -18,7 +18,6 @@
 \usepackage{fancyhdr}				% pour faire des beaux headers
 \usepackage[pdftex,plainpages=false,colorlinks=true,linkcolor=blue, citecolor=blue, urlcolor=blue]{hyperref}
 \usepackage{fancyvrb}
-
 \usepackage{titlesec}
 
 \usepackage{listings}
@@ -43,7 +42,6 @@
   innerbottommargin=0pt,
   roundcorner=5pt,
   nobreak=true]{bashInput}
-
 
 \lstset{columns=fullflexible,basicstyle=\ttfamily}
 
@@ -86,7 +84,7 @@
   columns=flexible,
   showstringspaces=false,
   moredelim=**[is][\color{red}]{~@}{@~},
-  moredelim=**[is][\color{blue}]{@@}{@@},
+  moredelim=**[is][\color{mymauve}]{@@}{@@},
   mathescape = true
 }
 
@@ -182,12 +180,25 @@ $\dollar$ grep                       # find a text or pattern in one or multiple
 \end{lstlisting}
 \end{bashInput}
 
-In this document, we use "\verb $ " sign to indicate the terminal prompt 
-and the "\verb # " indicates a comment in the bash terminal.
-%The name "local" is the name of the terminal that run on your (local) computer.
+In this document, we use ``\verb $ '' sign to indicate the terminal prompt 
+and the ``\verb # '' indicates a comment in the bash terminal.
+%The name ``local'' is the name of the terminal that run on your (local) computer.
 %A different name will be used when we will be logged on a remorte computer like mammouth.
 If you need help to get familliar with Linux (Unix), I suggest the first 4 lectures of this website: 
 \url{http://www.doc.ic.ac.uk/~wjk/UnixIntro/index.html}.
+
+Another essential element is to learn how to edit a text file with a terminal text editor 
+like \verb nano  (basic and simple) or \verb vi  (complicated and powerful).
+This will become important when you will need to edit a file remotely (on another computer, like mammouth) from your terminal.
+With the basic setup, these editors won't allow for mouse inputs.
+You must rely on multiple keyboard shortcuts to edit correctly your file.
+For the present tutorial, the reader only need to know how to open, edit and save a file.
+
+Another important tip is the copy-paste in command-line, hence if \verb nano  and \verb vi . 
+On a PC keyboard, the Ctrl-c and Ctrl-v probably won't work.
+You must then use Ctrl-shift-c and Ctrl-shift-v if that is the case.
+This is useful if, for example, you want to copy the text from this ``pdf'' file to the terminal.
+
 
 \subsection{Connect to Mammouth}
 Once you're familliar with Linux, you can connect to mammouth, the supercalculator at Sherbrooke University. 
@@ -200,8 +211,12 @@ Now go in a terminal and type:
 \end{lstlisting}   
 \end{bashInput}
 
-
-Then enter your password, and that's it, you're connected! Notice that you're connected to the MS, standing for \emph{Mammouth Serie}. There is also MP (\emph{Mammouth Parallel}), a different cluster with more computing cores, to which you can connect by replacing \verb tremblay-ms  by \verb tremblay-mp  in the command.
+Then enter your password, and that's it, you're connected! 
+The name \verb local  is the name of the terminal that run on your (local) computer.
+A different name will be used when we will be logged on a remorte computer like mammouth.
+Notice that you're connected to the MS, standing for \emph{Mammouth Serie}. 
+There is also MP (\emph{Mammouth Parallel}), a different cluster with more computing cores, 
+to which you can connect by replacing \verb tremblay-ms  by \verb tremblay-mp2  in the command.
 
 \subsection{Moving files}
 Here are some commands that can be useful to move files between your computer and mammouth. 
@@ -221,27 +236,35 @@ and from your computer to mammouth
 ~@local@~$\dollar$ scp -r ./file charleb1@tremblay-ms.ccs.usherbrooke.ca:~/path/file
 \end{lstlisting}
 \end{bashInput}
-the "-r" (recursively) is to move folders (like with the cp command). 
-Your password will be asked, except if you make it automatic (next).
+the ``-r '' (recursively) is to move folders (like with the \verb cp command). 
+Your password will be asked.%, except if you make it automatic (next).
 
 
 \section{Launch jobs on Mammouth}
 
-Most of the informations here were taken from:
+Most of the informations in this section were taken from:
 \url{http://wiki.calculquebec.ca/w/Running_jobs#tab=tab8}
-
+Once you are logged onto mammouth, you can already execute some commands and codes.
+But, you are on the interactive node, shared with other users of the department
+(you can check who with the command \verb who  and even write to them with the command \verb write ).
+Since the node is interactive, you can run your code, interact with it and debug, 
+but it should not be used for more than that.
+If you want to lauch a code and wait for the result, you need to do a job submission.
+A rule of thumb is: if code that runs for more than 20 minutes or requires more than half of the node's 
+processors (cores), it should be launched with a job submission.
 
 \subsection{Job submissions}
 
 There are two way to submit jobs on mammouth, here I present the basic way with the command \verb qsub . 
-There is also a fancier way, with the \verb bqsubmit  command, but I'll skip it for now. 
+There is also a fancier and more powerful way, with the \verb bqsubmit  command (see next sections). 
 When submitting jobs, one first need to ask for the necessary amount of cores and memory. 
 This is done with a system called \emph{Torque} (identified by acronym PBS) which manage the priority of your jobs, 
 given a set of mysterious rules.
 Although you could learn everythin on internet, here are my personal basics. 
 The idea is to write a file containing the commands to execute as a script, preceded by a PBS header. 
 Let's name this file \verb sub.pbs . 
-Here, I want to execute \verb echo  \verb "hello  \verb world"  using 2 cores on mammouth (somewhat overkill) and record the terminal output in a file name \verb ecran_out  (otherwise lost):
+Here, I want to execute \verb echo  \verb "hello  \verb world"  using 2 cores on mammouth (somewhat overkill) 
+and record the terminal output in a file name \verb ecran_out  (otherwise lost):
 
 Submission file \verb sub.pbs :
 
@@ -267,7 +290,7 @@ The idea behind this is that our allowed total time per core is counted and dete
 We don't want to use too much. 
 
 The last part is the executed script. 
-The command \verb cd  \verb $PBS_O_WORKDIR  set the "current directory" at the directory from where the submission was called (with the environnement variable \verb $PBS_O_WORKDIR ) when running the script. 
+The command \verb cd  \verb $PBS_O_WORKDIR  set the ``current directory'' at the directory from where the submission was called (with the environnement variable \verb $PBS_O_WORKDIR ) when running the script. 
 This is necessary if you want the output files your script to end there. 
 
 Finally, one can submit this once and for all:
@@ -306,31 +329,49 @@ To get your specific jobs, use (-u for users):
 ~@ms$\dollar$@~ qstat -nu charleb1
 
 ms.m: 
-                                                                                  Req'd    Req'd       Elap
-Job ID                  Username    Queue    Jobname          SessID  NDS   TSK   Memory   Time    S   Time
------------------------ ----------- -------- ---------------- ------ ----- ------ ------ --------- - ---------
-177107.ms.m             charleb1    qwork    nameToTrackYourJ   4059     1      2    --   00:05:00 R  00:00:02
-   cs302/0+cs302/1
+@@...........................................................................@@Req'd@@...@@Req'd@@.......@@Elap
+Job ID@@...............@@Username@@....@@Queue@@....@@Jobname@@.....@@SessID@@..@@NDS@@...@@TSK@@...@@Memory@@...@@Time@@....@@S@@...@@Time
+--------------------@@.@@-----------@@.@@--------@@.@@-----------@@.@@------@@.@@-----@@.@@------@@.@@------@@.@@---------@@.@@-@@.@@---------
+177107.ms.m@@..........@@charleb1@@....@@qwork@@....@@nameToTrack@@...@@4059@@.....@@1@@......@@2@@....@@--@@...@@00:05:00@@.@@R@@..@@00:00:02
+@@...@@cs302/0+cs302/1
 \end{lstlisting}
 \end{bashInput}
 
-
-%\begin{center}
-%\includegraphics[width=160mm,trim={0 0 1cm 2cm},clip]{hello.png}
-%\end{center}
 
 
 The status of the job will be marked as Q if it is waiting in the queue and as R if running. 
-Once the job is running you can see on which node it is (given that you added the -n option, for ``node"). 
-You can even visit this particular node with the command \verb ssh  followed by the number of the node, and then, 
-for example, you can check the core usage with command \verb top .
+Once the job is running you can see on which node it is, given that you added the -n option, for ``node''. 
+Here, \verb qstat  shows that the nodes \verb cs302  is used, with processor \verb 0  and \verb 1 .
+While the code is running, you can visit this particular node with the command \verb ssh . 
+Once on the node, you can, for example, check the CPU usage \verb %  and the memory allocated with the command \verb top : 
 
-Finally, if something is wrong, use \verb qdel  with the number of the job, to kill it. It should look like:
 \begin{bashInput}
 \begin{lstlisting}[style=BashInputStyle]
-~@ms$\dollar$@~ qdel 645587.ms.m
+~@ms$\dollar$@~ ssh cs302
+~@cs302$\dollar$@~ top
 \end{lstlisting}
 \end{bashInput}
+
+%for example, you can check the core usage with command \verb top .
+
+Finally, if something is wrong, use \verb qdel  with the number of the job, to kill it:
+\begin{bashInput}
+\begin{lstlisting}[style=BashInputStyle]
+~@ms$\dollar$@~ qdel 177107.ms.m
+\end{lstlisting}
+\end{bashInput}
+
+
+
+\subsection{Submit a lot of calculations}
+
+MP and MS offer another tool to submit a lot of jobs at the same time: BqTools.
+This offer the possibility to lauch the same code with different parameters and correctly allocate every jobs
+and create every corresponding directories. 
+This is the ideal way to scan multiples parameters, but requires a little more efforts. 
+For now, we recommend the reader to consult \url{http://wiki.calculquebec.ca/w/BqTools/en}
+
+
 
 \subsection{Monitor the available nodes}
 One very useful command to see how many nodes are busy on the cluster is 
@@ -343,18 +384,141 @@ Which will show you each available queue and the number of request made on that 
 
 \section{Compile on mammouth}
 
-To compile some programs, various libraries such as GSL or CUBA may be needed. The \emph{module} command allows you to  add or remove different versions of various common libraries on your sessions in order to use them when compiling. Here are the most important commands
+When you develop a code, you cannot compile it on your personal computer and copy the code on mammouth.
+It will most probably won't work, and if it works, it will most probably will not be optimal.
+You must then learn to compile your code directly on the version of mammouth you want to run your code (MS or MP).
+
+\subsection{Your first code}
+
+A very basic source code can be obtain by running the command:
 \begin{bashInput}
 \begin{lstlisting}[style=BashInputStyle]
-~@ms$\dollar$@~ module list
-~@ms$\dollar$@~ module avail
-~@ms$\dollar$@~ module add mymodule
-~@ms$\dollar$@~ module init-add mymodule
-~@ms$\dollar$@~ module rm mymodule
-~@ms$\dollar$@~ module init-rm mymodule
+~@ms$\dollar$@~ hg clone https://bitbucket.org/mnmpdadish/afmconductivities
+\end{lstlisting}
+\end{bashInput}
+You can go in the newly created directory \verb afmconductivities  and view the information in the README file.
+In this directory, the code should compile directly with the command:
+\begin{bashInput}
+\begin{lstlisting}[style=BashInputStyle]
+~@ms$\dollar$@~ make
+\end{lstlisting}
+\end{bashInput}
+This command will read the \verb makefile  and generate locally a executable binary file \verb afmCond .
+To run this code, you can type the command:
+\begin{bashInput}
+\begin{lstlisting}[style=BashInputStyle]
+~@ms$\dollar$@~ ./afmCond
+\end{lstlisting}
+\end{bashInput}
+This will read the \verb model.dat  file present in the directory and compute various physical quantities
+(check the README for more informations about the physics). 
+With the present \verb model.dat  file, this should run under one minute.
+
+\subsection{The \protect\Verb+bin+  directory}
+
+The memory space on mammouth is expensive.
+It is a good practice to avoid to copy paste your executables in every directory you want to use them.
+A good practice is to use the \verb bin  directory, or any equivalent.
+
+In your home directory (the one you access by doing the \verb cd ), you should have a directory named \verb bin .
+If it is not there, create it with \verb mkdir  \verb bin .
+This is the directory where you want to move (\verb mv ) your binary files in order to have access to this 
+command from anywhere on your computer.
+Avoid to use binary names that corresponds to already existing terminal command, otherwise it could make this 
+command (or your program) unreachable.
+
+The \verb bin  directory is automatically added to the executable \verb PATH  on mammouth due to the lines
+
+\begin{bashInput}[backgroundcolor=myblue]
+\begin{lstlisting}[style=FileInputStyle]
+export PATH=$\dollar$PATH:$\dollar$HOME/bin
+\end{lstlisting}
+\end{bashInput}
+in \verb ~\.bash_profile  file.
+You can create your own \verb bin  directory by adding a similar line in your  \verb ~\.bash_profile  file 
+or \verb ~\.bashrc  file.
+
+\subsection{The \protect\Verb+module+  command}
+
+In order to avoid that every user install the same library multiple times, 
+some program on mammouth compiled and shared for all users.
+These are called ``modules'' and can be managed with the \verb module  command.
+
+Let's download another source code that requires some modules:
+\begin{bashInput}
+\begin{lstlisting}[style=BashInputStyle]
+~@ms$\dollar$@~ hg clone https://bitbucket.org/mnmpdadish/onebody
+\end{lstlisting}
+\end{bashInput}
+If you go in the new directory \verb onebody  and type \verb make  you will receive an error message.
+This is because this code requires a more recent \verb gcc  compiler and some external libraries 
+(cuba and lapack).
+On MS, the libraries you need to load are obtained with the command:
+\begin{bashInput}
+\begin{lstlisting}[style=BashInputStyle]
+~@ms$\dollar$@~ module add gcc/6.4.0 cuba/4.0 intel64/12.1.3.293
+\end{lstlisting}
+\end{bashInput}
+and on MP2 the libraries are:
+\begin{bashInput}
+\begin{lstlisting}[style=BashInputStyle]
+~@mp2$\dollar$@~ module add gcc/6.1.0 cuba/4.0 intel64/13.1.3.192
+\end{lstlisting}
+\end{bashInput}
+With these modules loaded, you can compile (\verb make ) and run (\verb oneBody_ms  or \verb oneBody_mp ) 
+the code.
+
+Here are some more commands you can use to play with the modules:
+\begin{bashInput}
+\begin{lstlisting}[style=BashInputStyle]
+~@ms$\dollar$@~ module list                     # list the modules loaded
+~@ms$\dollar$@~ module avail                    # modules available on the current computer
+~@ms$\dollar$@~ module add mymodules            # you already know
+~@ms$\dollar$@~ module rm mymodules             # remove a loaded module
+~@ms$\dollar$@~ ml                              # same as: module list
+~@ms$\dollar$@~ ml mymodules                    # same as: module add mymodule
+~@ms$\dollar$@~ module initadd mymodules        # add module to the default modules list
+~@ms$\dollar$@~ module initrm mymodules         # rm module to the default modules list
 \end{lstlisting}
 \end{bashInput}
 
+The two last lines are very important. 
+Indeed, most of the time, you need modules not only for the compilation, 
+but also for the execution of the binary.
+If you try to logout from mammouth and come back, the code you compiled won't run anymore,
+unless you used \verb initadd  with the correct modules. 
+These commands edit the file \verb ~/.modules  (or \verb ~/.modules_mp2  on MP).
+You can edit manually these files, but there is a good risk that these two commands won't work anymore.
+If that is the case, you can always delete them, and the system will create fresh new \verb .modules  files.
+
+\subsection{Plotting some results using \protect\Verb+gnuplot+  }
+
+It can be useful to rapidely plot some results obtained.
+As long as the result are in text format, it should be possible to plot using \verb gnuplot .
+Both code downloaded in this tutorial provide some plotting example in their README
+
+To get a pretty Fermi surface, you can go to the directory of the code onebody and run these commands:
+\begin{bashInput}
+\begin{lstlisting}[style=BashInputStyle]
+~@ms$\dollar$@~ oneBody_ms mdc
+~@ms$\dollar$@~ module add gnuplot/4.5
+~@ms$\dollar$@~ gnuplot
+~@gnuplot>@~ plot 'mdc.dat' matrix with image
+~@gnuplot>@~ q
+\end{lstlisting}
+\end{bashInput}
+The last line is to exit gnuplot. You can also plot a more traditional plot (x-y axis) with:
+
+\begin{bashInput}
+\begin{lstlisting}[style=BashInputStyle]
+~@ms$\dollar$@~ oneBody_ms l
+~@ms$\dollar$@~ gnuplot
+~@gnuplot>@~ plot 'n.out' u 1:2 w lp
+\end{lstlisting}
+\end{bashInput}
+
+\verb gnuplot  is much more powerful and configurable. But this give a good starting point to visualize your 
+data on mammouth.
 
 
 \end{document}
