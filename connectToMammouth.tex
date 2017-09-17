@@ -1,7 +1,7 @@
 \documentclass[10pt,letter]{article}
 
 %------------------------------------------------------------------------------------------------------------------------%
-
+\usepackage{blindtext}
 %\usepackage[french]{babel} 			% parce qu'on travaille en fraçais
 \usepackage[utf8]{inputenc}	% maudit MAC!
 %\usepackage[cyr]{aeguill}				% règle un problème de guillemets
@@ -11,14 +11,14 @@
 \usepackage{fullpage} 				% parce qu'on a pas de note en marge
 \usepackage{geometry}				% permet de changer les marges
 \usepackage[pdftex]{graphicx}		% permet de dimensioner des graphismes
-\usepackage{tocbibind}				% inclut la TOC et la BIBLI dans la table des matière
+%\usepackage{tocbibind}				% inclut la TOC et la BIBLI dans la table des matière
 \usepackage[small,bf]{caption}		% change le format des captions
 \usepackage{wrapfig}					% permet de mettre des petite figures en petit
 \usepackage{multicol}					% plusieurs colonnes
 \usepackage{fancyhdr}				% pour faire des beaux headers
 \usepackage[pdftex,plainpages=false,colorlinks=true,linkcolor=blue, citecolor=blue, urlcolor=blue]{hyperref}
 \usepackage{fancyvrb}
-\usepackage{titlesec}
+%\usepackage{titlesec}
 
 \usepackage{listings}
 \usepackage{xcolor}
@@ -123,7 +123,7 @@
 %Substitution des symbols
 
 
-\fancyhead[LO,LE]{Simon Verret \& Maxime Charlebois}
+\fancyhead[LO,LE]{Maxime Charlebois \& Simon Verret}
 \fancyhead[RO,RE]{Using Mammouth}
 
 \begin{document}
@@ -133,7 +133,7 @@
 \begin{centering}
 
 \Large{\textbf{Using Mammouth}}\\
-\normalsize{Simon Verret \& Maxime Charlebois}\\
+\normalsize{Maxime Charlebois \& Simon Verret}\\
 \small{Sherbrooke\\ September 2017}
 
 \end{centering}
@@ -142,7 +142,9 @@
 
 
 \begin{abstract}
-This is intended to help someone who wants to connect to the supercomputer mammouth. It shows how to put jobs in the execution queue and how to follow the progression for those jobs.
+This is intended to help someone who wants to connect to the supercomputer mammouth. 
+It shows how to put jobs in the execution queue, how to follow the progression for those jobs
+and how to compile and run simple programs.
 \end{abstract}
 
 \tableofcontents
@@ -158,11 +160,11 @@ This is intended to help someone who wants to connect to the supercomputer mammo
 \section{Linux command line}
 Before reading this, one should be familliar with Linux terminal 
 (Bash language, same as Mac terminal or Unix terminal). 
-Strictly speaking, Linux is an OS like every other: 
-it allows you to acces direcories, modify files and execute programs. 
-However, Linux can be intimidating because it usually requires the terminal to operate.
+%Strictly speaking, Linux is an OS like every other: 
+%it allows you to acces direcories, modify files and execute programs. 
+%However, Linux can be intimidating because it usually requires the terminal to operate.
 The reader is expected to know the basic commands before reading this document. 
-Here is a list of the most important command that you should know before reading this document:
+Here is a list of the most important commands that one should know before reading this document:
 
 \begin{bashInput}
 \begin{lstlisting}[style=BashInputStyle]
@@ -181,11 +183,11 @@ $\dollar$ grep                       # find a text or pattern in one or multiple
 \end{bashInput}
 
 In this document, we use ``\verb $ '' sign to indicate the terminal prompt 
-and the ``\verb # '' indicates a comment in the bash terminal.
+and the ``\verb # '' indicates a comment in the bash language.
 %The name ``local'' is the name of the terminal that run on your (local) computer.
 %A different name will be used when we will be logged on a remorte computer like mammouth.
-If you need help to get familliar with Linux (Unix), I suggest the first 4 lectures of this website: 
-\url{http://www.doc.ic.ac.uk/~wjk/UnixIntro/index.html}.
+If you need help to get familliar with Linux (Unix), I suggest the first 6 tutorials of this website: 
+\url{http://www.ee.surrey.ac.uk/Teaching/Unix/index.html}.
 
 Another essential element is to learn how to edit a text file with a terminal text editor 
 like \verb nano  (basic and simple) or \verb vi  (complicated and powerful).
@@ -197,13 +199,14 @@ For the present tutorial, the reader only need to know how to open, edit and sav
 Another important tip is the copy-paste in command-line, hence if \verb nano  and \verb vi . 
 On a PC keyboard, the Ctrl-c and Ctrl-v probably won't work.
 You must then use Ctrl-shift-c and Ctrl-shift-v if that is the case.
-This is useful if, for example, you want to copy the text from this ``pdf'' file to the terminal.
+This is useful if, for example, you want to copy the text from this ``.pdf'' file to the terminal. 
+On Mac, the shortcuts Cmd-c and Cmd-v should remain the same.
 
 
 \subsection{Connect to Mammouth}
-Once you're familliar with Linux, you can connect to mammouth, the supercalculator at Sherbrooke University. 
-Of course, you'll need to get a username and a password with the help of your supervisor.
-Let's suppose here that your supervisor is Andre-Marie Tremblay and that your username is charleb1.
+Once you are familliar with Linux, you can connect to mammouth, the supercalculator at Sherbrooke University. 
+Of course, you will need to get a username and a password with the help of your supervisor.
+Let's suppose here that your supervisor is Andre-Marie Tremblay and that the username you got is \verb charleb1 .
 Now go in a terminal and type:
 \begin{bashInput}
 \begin{lstlisting}[style=BashInputStyle]
@@ -211,20 +214,21 @@ Now go in a terminal and type:
 \end{lstlisting}   
 \end{bashInput}
 
-Then enter your password, and that's it, you're connected! 
+Then enter your password, and that's it, you are connected! 
 The name \verb local  is the name of the terminal that run on your (local) computer.
 A different name will be used when we will be logged on a remorte computer like mammouth.
-Notice that you're connected to the MS, standing for \emph{Mammouth Serie}. 
+Notice that you are connected to the MS, standing for \emph{Mammouth Serie}. 
 There is also MP (\emph{Mammouth Parallel}), a different cluster with more computing cores, 
 to which you can connect by replacing \verb tremblay-ms  by \verb tremblay-mp2  in the command.
 
 \subsection{Moving files}
 Here are some commands that can be useful to move files between your computer and mammouth. 
-You must run them on a  terminal and not on a terminal logged onto mammouth.
+You must run them on a local terminal and not on a terminal logged onto mammouth.
 Indeed, you need to specify an internet address or a ip.
 Since you most likely don't know the ip address of your computer, 
 it is always better to use these command on a local terminal.
-To move from mammouth to your computer:
+
+To copy from mammouth to your computer:
 \begin{bashInput}
 \begin{lstlisting}[style=BashInputStyle]
 ~@local@~$\dollar$ scp -r charleb1@tremblay-ms.ccs.usherbrooke.ca:~/path/file ./file
@@ -236,15 +240,15 @@ and from your computer to mammouth
 ~@local@~$\dollar$ scp -r ./file charleb1@tremblay-ms.ccs.usherbrooke.ca:~/path/file
 \end{lstlisting}
 \end{bashInput}
-the ``-r '' (recursively) is to move folders (like with the \verb cp command). 
-Your password will be asked.%, except if you make it automatic (next).
+the ``-r '' (recursively) is to copy folders (like with the \verb cp  command). 
+Your password will be asked like for \verb ssh .%, except if you make it automatic (next).
 
 
 \section{Launch jobs on Mammouth}
 
 Most of the informations in this section were taken from:
-\url{http://wiki.calculquebec.ca/w/Running_jobs#tab=tab8}
-Once you are logged onto mammouth, you can already execute some commands and codes.
+\url{http://wiki.calculquebec.ca/w/Running_jobs#tab=tab8}.
+Once you are logged into mammouth, you can already execute some commands and codes.
 But, you are on the interactive node, shared with other users of the department
 (you can check who with the command \verb who  and even write to them with the command \verb write ).
 Since the node is interactive, you can run your code, interact with it and debug, 
@@ -256,11 +260,11 @@ processors (cores), it should be launched with a job submission.
 \subsection{Job submissions}
 
 There are two way to submit jobs on mammouth, here I present the basic way with the command \verb qsub . 
-There is also a fancier and more powerful way, with the \verb bqsubmit  command (see next sections). 
+There is also a fancier and more powerful way, with the \verb bqsubmit  command (see section \ref{bqsubmit}). 
 When submitting jobs, one first need to ask for the necessary amount of cores and memory. 
 This is done with a system called \emph{Torque} (identified by acronym PBS) which manage the priority of your jobs, 
 given a set of mysterious rules.
-Although you could learn everythin on internet, here are my personal basics. 
+%Although you could learn everythin on internet, here are my personal basics. 
 The idea is to write a file containing the commands to execute as a script, preceded by a PBS header. 
 Let's name this file \verb sub.pbs . 
 Here, I want to execute \verb echo  \verb "hello  \verb world"  using 2 cores on mammouth (somewhat overkill) 
@@ -284,7 +288,9 @@ The second line, the first PBS line, determines the name of the job,
 because keeping good track of the jobs you submit is a really good habit to take. 
 The second PBS line determine the queue in which you want to submit your job. 
 Appart from \verb qwork@ms  (allows max 120h) , there is also \verb qtest@ms  (max $\sim$10h)  and \verb qlong@ms  (max 1000h). 
-It is the third PBS line which is important, since it specifies the requirements of one job. 
+If you want to lauch job on MP, the most common queue is \verb qwork@mp2 . 
+It is important to stress that you must be logged on MS when you \verb qsub  a ``pbs'' file with \verb qwork@ms  and on MP when you \verb qsub  a ``pbs'' file with \verb qwork@mp2 .
+The third PBS line specifies the requirements of one job. 
 For example, here we ask for 1 node, 2 cores (ppn for ``processor per node''), and an expected maximum time of 00:05 hours (5 minutes). 
 The idea behind this is that our allowed total time per core is counted and determines our priorities in the queues. 
 We don't want to use too much. 
@@ -294,6 +300,7 @@ The command \verb cd  \verb $PBS_O_WORKDIR  set the ``current directory'' at the
 This is necessary if you want the output files your script to end there. 
 
 Finally, one can submit this once and for all:
+
 \begin{bashInput}
 \begin{lstlisting}[style=BashInputStyle]
 ~@ms$\dollar$@~ qsub sub.pbs
@@ -302,13 +309,14 @@ Finally, one can submit this once and for all:
 The job gets a number which will be displayed and then is waiting in the queue.
 
 
-There is 8 cores per node and 16 Go of memory. 
+On MS, there is 8 cores per node and 16 Go of memory. 
 A single node is always reserved to a single user. 
 A good habit is therefore to fill a node completely as often as possible, 
 so that you don't waste the unused core time. 
 So, one should send 8 jobs with node=1 and ppn=1 at a time, or 4 with ppn=2, or any other combination that gives 8. 
 For memory greedy programs, it can be avised to ask for more cores even if the program use only one of them. 
-That way you won't have memory conflicts. For example, with \verb qcm  I like to send only two 12-sites computations by node.
+That way you won't have memory conflicts. 
+%For example, with \verb qcm  I like to send only two 12-sites computations by node.
 
 
 \subsection{Follow your jobs}
@@ -321,8 +329,6 @@ To get your specific jobs, use (-u for users):
 %~@ms$\dollar$@~ qstat -nu charleb1
 %\end{lstlisting}
 %\end{bashInput}
-
-
 \begin{bashInput}
 \obeyspaces
 \begin{lstlisting}[style=BashOutputStyle]
@@ -343,7 +349,7 @@ The status of the job will be marked as Q if it is waiting in the queue and as R
 Once the job is running you can see on which node it is, given that you added the -n option, for ``node''. 
 Here, \verb qstat  shows that the nodes \verb cs302  is used, with processor \verb 0  and \verb 1 .
 While the code is running, you can visit this particular node with the command \verb ssh . 
-Once on the node, you can, for example, check the CPU usage \verb %  and the memory allocated with the command \verb top : 
+Once on the node, you can, for example, check the CPU usage and the memory allocated with the command \verb top : 
 
 \begin{bashInput}
 \begin{lstlisting}[style=BashInputStyle]
@@ -364,6 +370,7 @@ Finally, if something is wrong, use \verb qdel  with the number of the job, to k
 
 
 \subsection{Submit a lot of calculations}
+\label{bqsubmit}
 
 MP and MS offer another tool to submit a lot of jobs at the same time: BqTools.
 This offer the possibility to lauch the same code with different parameters and correctly allocate every jobs
@@ -374,7 +381,7 @@ For now, we recommend the reader to consult \url{http://wiki.calculquebec.ca/w/B
 
 
 \subsection{Monitor the available nodes}
-One very useful command to see how many nodes are busy on the cluster is 
+One very useful command to see how many nodes are busy on the cluster is: 
 \begin{bashInput}
 \begin{lstlisting}[style=BashInputStyle]
 ~@ms$\dollar$@~ bqmon
@@ -384,7 +391,7 @@ Which will show you each available queue and the number of request made on that 
 
 \section{Compile on mammouth}
 
-When you develop a code, you cannot compile it on your personal computer and copy the code on mammouth.
+When you develop a code, you cannot compile it on your personal computer and copy the binary file on mammouth.
 It will most probably won't work, and if it works, it will most probably will not be optimal.
 You must then learn to compile your code directly on the version of mammouth you want to run your code (MS or MP).
 
@@ -418,9 +425,9 @@ With the present \verb model.dat  file, this should run under one minute.
 
 The memory space on mammouth is expensive.
 It is a good practice to avoid to copy paste your executables in every directory you want to use them.
-A good practice is to use the \verb bin  directory, or any equivalent.
+A good practice is to use the \verb bin  directory.
 
-In your home directory (the one you access by doing the \verb cd ), you should have a directory named \verb bin .
+In your home directory (the one you access by doing the \verb cd  alone, or \verb cd  \verb ~ ), you should have a directory named \verb bin .
 If it is not there, create it with \verb mkdir  \verb bin .
 This is the directory where you want to move (\verb mv ) your binary files in order to have access to this 
 command from anywhere on your computer.
@@ -452,14 +459,14 @@ Let's download another source code that requires some modules:
 \end{bashInput}
 If you go in the new directory \verb onebody  and type \verb make  you will receive an error message.
 This is because this code requires a more recent \verb gcc  compiler and some external libraries 
-(cuba and lapack).
+(Cuba and Lapack).
 On MS, the libraries you need to load are obtained with the command:
 \begin{bashInput}
 \begin{lstlisting}[style=BashInputStyle]
 ~@ms$\dollar$@~ module add gcc/6.4.0 cuba/4.0 intel64/12.1.3.293
 \end{lstlisting}
 \end{bashInput}
-and on MP2 the libraries are:
+and on MP the libraries are:
 \begin{bashInput}
 \begin{lstlisting}[style=BashInputStyle]
 ~@mp2$\dollar$@~ module add gcc/6.1.0 cuba/4.0 intel64/13.1.3.192
@@ -497,7 +504,7 @@ It can be useful to rapidely plot some results obtained.
 As long as the result are in text format, it should be possible to plot using \verb gnuplot .
 Both code downloaded in this tutorial provide some plotting example in their README
 
-To get a pretty Fermi surface, you can go to the directory of the code onebody and run these commands:
+To get a pretty Fermi surface, you can go to the directory \verb onebody  and run these commands:
 \begin{bashInput}
 \begin{lstlisting}[style=BashInputStyle]
 ~@ms$\dollar$@~ oneBody_ms mdc
